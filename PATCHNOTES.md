@@ -19,3 +19,7 @@
 
 [*] Fixed end protection & battle arena locations bug
 
+## V1.1.0
+
+[+] Adding multi languages & translation support in configuration file
+

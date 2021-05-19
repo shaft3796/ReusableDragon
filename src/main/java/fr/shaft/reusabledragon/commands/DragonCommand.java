@@ -1,5 +1,6 @@
 package fr.shaft.reusabledragon.commands;
 
+import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.RdEntity;
@@ -41,7 +42,7 @@ public class DragonCommand implements CommandExecutor {
         RdManager.actualiseFightStatue();
         if(RdManager.getFightStatue()){
 
-            player.sendMessage(ChatColor.RED + " [Re Dragon] Un dragon est deja en vie !");
+            player.sendMessage(ChatColor.RED + Lang.get("dragonStillAlive"));
             return true;
         }
 
@@ -78,7 +79,7 @@ public class DragonCommand implements CommandExecutor {
             }
         }
         if(!spawnable){
-            player.sendMessage(ChatColor.RED + " [Re Dragon] Il vous manque des choses pour faire spawn le dragon !");
+            player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
             return true;
         }
 
@@ -101,7 +102,7 @@ public class DragonCommand implements CommandExecutor {
         DragonFight task = new DragonFight();
         taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(),task, 0, 1);
 
-        player.sendMessage(ChatColor.GREEN + " [Re Dragon] Lancement du dragon !");
+        player.sendMessage(ChatColor.GREEN + Lang.get("fightStarting"));
 
         //Remove items from player inv
         for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){

@@ -101,6 +101,12 @@ public class RdManager {
         return battleArenaEnd;
     }
 
+    //Lang
+    private static String lang;
+    public static String getLang() {
+        return lang;
+    }
+
     /*---------------
           Build
     ---------------*/
@@ -110,11 +116,8 @@ public class RdManager {
         //Ini
         plugin = pl;
 
-        //commands
-        registerCommands();
-
-        //Listeners
-        registerListeners();
+        //Lang registration
+        langRegistration();
 
         //materials
         registerMaterials();
@@ -127,6 +130,14 @@ public class RdManager {
 
         //Locations registration
         locationsRegistration();
+
+        //Listeners
+        registerListeners();
+
+        //commands
+        registerCommands();
+
+
 
         //File loading
         BuildManager.generateSamples();
@@ -255,6 +266,13 @@ public class RdManager {
         //Converted values
         battleArenaRoots = new Location(world, rootX, rootY, rootZ);
         battleArenaEnd = new Location(world, endX, endY, endZ);
+
+    }
+
+    //Lang registration
+    private static void langRegistration(){
+
+        lang = plugin.getConfig().getString("language");
 
     }
 

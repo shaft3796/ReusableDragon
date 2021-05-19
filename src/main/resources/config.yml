@@ -11,7 +11,7 @@ endProtectionEnd: "200 200 200"
 #start of the battle arena zone huge dimensions may cause lag and crash /!\
 battleArenaRoots: "-50 50 -50"
 #end of the battle arena zone huge dimensions may cause lag and crash /!\
-battleArenaEnd: "500 110 50"
+battleArenaEnd: "50 110 50"
 
 
 #Materials and their quantity required to spawn the dragon with /dragon command you can find the list of the spigot materials here
@@ -53,4 +53,36 @@ required:
 
 rewards:
   - "DRAGON_EGG; 1; 5.0; false"
+
+#select your languages ! you can create your own translations
+
+language: "en"
+
+fr:
+  dragonStillAlive: "[Re Dragon] Un dragon est deja en vie !"
+  missingMaterials: "[Re Dragon] Il vous manque des choses pour faire spawn le dragon !"
+  fightStarting: "[Re Dragon] Lancement du dragon !"
+  saveDone: "[Re Dragon] Sauvegarde effectuée !"
+  breakInBossArea: "[Re Dragon] Hey, Vous ne pouvez pas casser de blocs ici, il n'y a pas de boss !!"
+  breakInProtectedArea: "[Re Dragon] Hey, Vous ne pouvez pas casser de blocs ici !!"
+  placeInBossArea: "[Re Dragon] Hey, Vous ne pouvez pas poser de blocs ici, il n'y a pas de boss !!"
+  placeInProtectedArea: "[Re Dragon] Hey, Vous ne pouvez pas poser de blocs ici !!"
+  placeUnAuthorizedBlock: "[Re Dragon] Hey, Vous ne pouvez pas poser ce type de blocs ici !!"
+  howToUse: "[Re Dragon] Hey, utilisez /dragon pour faire spawn le dragon !!!"
+  youKilledDragon: "[Re Dragon] Vous avez tue le dragon !! distribution des recompenses . ."
+  youGot: "Vous avez eu : "
+
+en:
+  dragonStillAlive: "[Re Dragon] Dragon is still alive !"
+  missingMaterials: "[Re Dragon] You are missing things to make the dragon spawn !"
+  fightStarting: "[Re Dragon] Starting of the dragon battle !"
+  saveDone: "[Re Dragon] Save performed !"
+  breakInBossArea: "[Re Dragon] Hey, you can't break blocks here ! There is no boss alive !!"
+  breakInProtectedArea: "[Re Dragon] Hey, you can't break blocks here !!"
+  placeInBossArea: "[Re Dragon] Hey, you can't place blocks here ! There is no boss alive !!"
+  placeInProtectedArea: "[Re Dragon] Hey, you can't place blocks here !!"
+  placeUnAuthorizedBlock: "[Re Dragon] Hey, you can't place this type of blocks here !!"
+  howToUse: "[Re Dragon] Hey, use /dragon to make the dragon spawn !!!"
+  youKilledDragon: "[Re Dragon] You killed the dragon !! rewards distribution . ."
+  youGot: "You got : "
 

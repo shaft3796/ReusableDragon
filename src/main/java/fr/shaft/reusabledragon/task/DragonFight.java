@@ -1,5 +1,6 @@
 package fr.shaft.reusabledragon.task;
 
+import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.Sample;
@@ -56,7 +57,7 @@ public class DragonFight implements Runnable{
 
                     if(RdManager.inArea(RdManager.getBattleArenaRoots(),RdManager.getBattleArenaEnd(), player.getLocation())){
 
-                        player.sendMessage(ChatColor.GOLD + "[Re Dragon] Vous avez tue le dragon !! distribution des recompenses . .");
+                        player.sendMessage(ChatColor.GOLD + Lang.get("youKilledDragon"));
                         players.add(pl);
                     }
 
@@ -73,11 +74,11 @@ public class DragonFight implements Runnable{
                                 if(pl.getInventory().firstEmpty()<0){
 
                                     pl.getWorld().dropItem(pl.getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(reward[0])), Integer.parseInt(reward[1])));
-                                    pl.sendMessage(ChatColor.GRAY + "Vous avez eu : " + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
+                                    pl.sendMessage(ChatColor.GRAY + Lang.get("youGot") + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
                                 }
                                 else{
                                     pl.getInventory().addItem(new ItemStack(Objects.requireNonNull(Material.getMaterial(reward[0])), Integer.parseInt(reward[1])));
-                                    pl.sendMessage(ChatColor.GRAY + "Vous avez eu : " + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
+                                    pl.sendMessage(ChatColor.GRAY + Lang.get("youGot") + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
                                 }
                             }
 
@@ -95,11 +96,11 @@ public class DragonFight implements Runnable{
                             if(pl.getInventory().firstEmpty()<0){
 
                                 pl.getWorld().dropItem(pl.getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(reward[0])), Integer.parseInt(reward[1])));
-                                pl.sendMessage(ChatColor.GRAY + "Vous avez eu : " + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
+                                pl.sendMessage(ChatColor.GRAY + Lang.get("youGot") + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
                             }
                             else{
                                 pl.getInventory().addItem(new ItemStack(Objects.requireNonNull(Material.getMaterial(reward[0])), Integer.parseInt(reward[1])));
-                                pl.sendMessage(ChatColor.GRAY + "Vous avez eu : " + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
+                                pl.sendMessage(ChatColor.GRAY + Lang.get("youGot") + ChatColor.ITALIC + reward[0]  + " x" + reward[1]);
                             }
                         }
 

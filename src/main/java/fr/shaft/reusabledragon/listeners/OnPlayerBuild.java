@@ -1,5 +1,6 @@
 package fr.shaft.reusabledragon.listeners;
 
+import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -38,13 +39,13 @@ public class OnPlayerBuild implements Listener {
                     return;
                 }else{
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, Vous ne pouvez pas casser de blocs ici, il n'y a pas de boss !!");
+                    event.getPlayer().sendMessage(ChatColor.RED + Lang.get("breakInBossArea"));
                 }
 
             }
             else{
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, Vous ne pouvez pas casser de blocs ici !!");
+                event.getPlayer().sendMessage(ChatColor.RED + Lang.get("breakInProtectedArea"));
             }
         }
 
@@ -71,18 +72,18 @@ public class OnPlayerBuild implements Listener {
 
                     if(event.getBlock().getType() == Material.END_CRYSTAL || event.getBlock().getType() == Material.TNT){
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, Vous ne pouvez pas poser ce type de blocs ici !!");
+                        event.getPlayer().sendMessage(ChatColor.RED + Lang.get("placeUnAuthorizedBlock"));
                     }
 
                 }else{
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, Vous ne pouvez pas poser de blocs ici, il n'y a pas de boss !!");
+                    event.getPlayer().sendMessage(ChatColor.RED + Lang.get("placeInBossArea"));
                 }
 
             }
             else{
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, Vous ne pouvez pas poser de blocs ici !!");
+                event.getPlayer().sendMessage(ChatColor.RED + Lang.get("placeInProtectedArea"));
             }
         }
 
@@ -100,7 +101,7 @@ public class OnPlayerBuild implements Listener {
         if (event.getMaterial() == Material.END_CRYSTAL && event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isOp() && event.getPlayer().getWorld() == RdManager.getWorld()) {
 
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.RED + "[Re Dragon] Hey, utilisez /dragon pour faire spawn le dragon !!!");
+            event.getPlayer().sendMessage(ChatColor.RED + Lang.get("howToUse"));
 
         }
     }

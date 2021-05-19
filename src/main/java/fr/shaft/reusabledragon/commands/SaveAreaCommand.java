@@ -1,13 +1,15 @@
 package fr.shaft.reusabledragon.commands;
 
+import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.Sample;
-import org.bukkit.Location;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class SaveAreaCommand implements CommandExecutor {
     @Override
@@ -27,6 +29,10 @@ public class SaveAreaCommand implements CommandExecutor {
         BuildManager.registerEntities(world);
         BuildManager.saveEntities();
         BuildManager.generateEntities(world);
+
+        //alert
+        Player player = (Player)sender;
+        player.sendMessage(ChatColor.GREEN + Lang.get("saveDone"));
 
         return true;
 
