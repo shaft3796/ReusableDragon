@@ -201,22 +201,60 @@ public class RdManager {
     //locations registration
     private static void locationsRegistration(){
 
+        //NO BUILD LAND ROOTS & END
         String str = plugin.getConfig().getString("endProtectionRoots");
         String[] splited = str.split(" ");
-        noBuildLandRoots = new Location(world, Integer.parseInt(splited[0]), Integer.parseInt(splited[1]), Integer.parseInt(splited[2]));
+
+        int inirootX = Integer.parseInt(splited[0]);
+        int inirootY = Integer.parseInt(splited[1]);
+        int inirootZ = Integer.parseInt(splited[2]);
 
         str = plugin.getConfig().getString("endProtectionEnd");
         splited = str.split(" ");
-        noBuildLandEnd = new Location(world, Integer.parseInt(splited[0]), Integer.parseInt(splited[1]), Integer.parseInt(splited[2]));
 
+        int iniendX = Integer.parseInt(splited[0]);
+        int iniendY = Integer.parseInt(splited[1]);
+        int iniendZ = Integer.parseInt(splited[2]);
+
+        //Conversion
+        int rootX = Math.min(inirootX, iniendX);
+        int rootY = Math.min(inirootY, iniendY);
+        int rootZ = Math.min(inirootZ, iniendZ);
+
+        int endX = Math.max(inirootX, iniendX);
+        int endY = Math.max(inirootY, iniendY);
+        int endZ = Math.max(inirootZ, iniendZ);
+
+        noBuildLandRoots = new Location(world, rootX, rootY, rootZ);
+        noBuildLandEnd = new Location(world, endX, endY, endZ);
+
+        //BATTLE ARENA ROOTS & END
         str = plugin.getConfig().getString("battleArenaRoots");
         splited = str.split(" ");
-        battleArenaRoots = new Location(world, Integer.parseInt(splited[0]), Integer.parseInt(splited[1]), Integer.parseInt(splited[2]));
+
+        inirootX = Integer.parseInt(splited[0]);
+        inirootY = Integer.parseInt(splited[1]);
+        inirootZ = Integer.parseInt(splited[2]);
 
         str = plugin.getConfig().getString("battleArenaEnd");
         splited = str.split(" ");
-        battleArenaEnd = new Location(world, Integer.parseInt(splited[0]), Integer.parseInt(splited[1]), Integer.parseInt(splited[2]));
 
+        iniendX = Integer.parseInt(splited[0]);
+        iniendY = Integer.parseInt(splited[1]);
+        iniendZ = Integer.parseInt(splited[2]);
+
+        //Conversion
+        rootX = Math.min(inirootX, iniendX);
+        rootY = Math.min(inirootY, iniendY);
+        rootZ = Math.min(inirootZ, iniendZ);
+
+        endX = Math.max(inirootX, iniendX);
+        endY = Math.max(inirootY, iniendY);
+        endZ = Math.max(inirootZ, iniendZ);
+
+        //Converted values
+        battleArenaRoots = new Location(world, rootX, rootY, rootZ);
+        battleArenaEnd = new Location(world, endX, endY, endZ);
 
     }
 
