@@ -1,0 +1,56 @@
+#Reusable Dragon Config file !
+
+#Name of the world of your server with the end, it's world_the_end if you didn't change it or if you didn't create an other world with multiverse.
+world: "world_the_end"
+
+#start of the main island protection zone
+endProtectionRoots: "-200 0 -200"
+#end of the main island protection zone
+endProtectionEnd: "200 200 200"
+
+#start of the battle arena zone huge dimensions may cause lag and crash /!\
+battleArenaRoots: "-50 50 -50"
+#end of the battle arena zone huge dimensions may cause lag and crash /!\
+battleArenaEnd: "500 110 50"
+
+
+#Materials and their quantity required to spawn the dragon with /dragon command you can find the list of the spigot materials here
+#Make sure to only use materials of your version !
+
+#Spigot materials 1.16.5 https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+#Spigot materials 1.15 https://helpch.at/docs/1.15/index.html?org/bukkit/Material.html
+#Spigot materials 1.14 https://helpch.at/docs/1.14/org/bukkit/Material.html
+#Spigot materials 1.13 https://helpch.at/docs/1.13/index.html?org/bukkit/Material.html
+#Spigot materials 1.12.2 https://helpch.at/docs/1.12.2/org/bukkit/Material.html
+#Spigot materials 1.11 https://helpch.at/docs/1.11.2/index.html?org/bukkit/Material.html
+#Spigot materials 1.10 https://helpch.at/docs/1.10/org/bukkit/Material.html
+#Spigot materials 1.9 https://helpch.at/docs/1.9/org/bukkit/Material.html
+#Spigot materials 1.8.8 https://helpch.at/docs/1.8.8/org/bukkit/Material.html
+#Spigot materials 1.7.2 https://helpch.at/docs/1.7.2/org/bukkit/Material.html
+
+#And use this format :
+# required:
+#  - "Material quantity"
+#  - "Material quantity"
+#  - "Material quantity"
+
+required:
+  - "END_CRYSTAL 4"
+
+#Rewards which will be earned by players, "<Material ( above )>; <quantity given>; <probability in %>; <true: each player has the given probability of obtaining the reward, false: if the reward appears it will be randomly given to a player>"
+
+#use this format :
+# rewards:
+#  - "Material; quantity; probability; type;"
+#  - "Material; quantity; probability; type;"
+#  - "Material; quantity; probability; type;"
+#Bad Material will made error and no reward but no crash, see the list above
+#Don't put more quantity that the item stack max quantity
+#Probability is in percent don't forget to add .0 at the end -> 10 is not correct, 10.0 is correct. You can use very small values like 0.01
+#type is true or false :
+#true: each player has the given probability of obtaining the reward so several players can win the rewards
+#false: if the reward appears it will be randomly given to a player so only one player can win the rewards
+
+rewards:
+  - "DRAGON_EGG; 1; 5.0; false"
+
