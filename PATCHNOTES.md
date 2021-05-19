@@ -4,7 +4,7 @@
 - [+] Added a feature
 - [^] upgraded a feature
 - [~] modified a feature
-- [*] bug fig
+- [*] bug fix
 # 
 
 ## V1.0.0
