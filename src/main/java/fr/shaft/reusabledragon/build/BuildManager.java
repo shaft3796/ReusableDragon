@@ -2,11 +2,11 @@ package fr.shaft.reusabledragon.build;
 
 import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.save.SaveModule;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
@@ -26,6 +26,17 @@ public class BuildManager {
     private static ArrayList<RdEntity> entities;
     public static ArrayList<RdEntity> getEntities() {
         return entities;
+    }
+
+    //Task self canceling stuff
+    private static int played;
+    public static int getPlayed() {
+        return played;
+    }
+
+    private static int taskid;
+    public static int getTaskid() {
+        return taskid;
     }
 
     /*---------------
@@ -206,6 +217,31 @@ public class BuildManager {
     }
 
     public static void loadEntity(RdEntity entity, World world){
+
+        //particle config
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(204, 0, 255), 2);
+
+        Location from = new Location(world, 0.5, 66, 0.5);
+        Location to = entity.getPos();
+        double space = 0.1;
+        double distance = from.distance(to);
+
+        Vector start = from.toVector();
+        Vector end = to.toVector();
+
+        Vector vector = end.clone().subtract(start).normalize().multiply(space);
+
+        double covered = 0;
+
+        for (; covered < distance; start.add(vector)) {
+
+            world.spawnParticle(Particle.REDSTONE, start.getX(), start.getY(), start.getZ(), 10, dustOptions);
+
+            covered += space;
+        }
+
+        world.playSound(new Location(RdManager.getWorld(), 0, 70, 0), Sound.BLOCK_GLASS_BREAK, 10, 29);
+
 
         world.spawnEntity(entity.getPos(), entity.getEntityType());
     }

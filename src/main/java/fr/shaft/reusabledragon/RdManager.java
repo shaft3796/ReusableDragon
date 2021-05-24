@@ -4,21 +4,19 @@ import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
+import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import org.bukkit.boss.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class RdManager {
@@ -137,14 +135,15 @@ public class RdManager {
         //commands
         registerCommands();
 
-
-
         //File loading
         BuildManager.generateSamples();
         BuildManager.generateEntities(world);
 
         //Fight Statue ini
         fightStatue = actualiseFightStatue();
+
+        //Dragon checking
+        dragonChecking();
 
     }
 
@@ -303,6 +302,19 @@ public class RdManager {
         int posZ = pos.getBlockZ();
 
         return posX < endX && posX > rootX && posY < endY && posY > rootY && posZ < endZ && posZ > rootZ;
+    }
+
+    //Dragon Checking
+    private static void dragonChecking(){
+
+        for(Entity entity : world.getEntities()){
+
+            if(entity instanceof EnderDragon || entity instanceof EnderCrystal){
+
+                entity.remove();
+
+            }
+        }
     }
 
 

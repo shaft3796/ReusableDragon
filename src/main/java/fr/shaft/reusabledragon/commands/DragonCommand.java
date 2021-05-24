@@ -15,6 +15,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,13 +26,31 @@ public class DragonCommand implements CommandExecutor {
     public static int getTaskid() {
         return taskid;
     }
+    public static void setTaskid(int taskid) {
+        DragonCommand.taskid = taskid;
+    }
+
+    private static int taskid2;
+    public static int getTaskid2() {
+        return taskid2;
+    }
+
+    private static int currentEntity;
+    public static int getCurrentEntity() {
+        return currentEntity;
+    }
+    public static void setCurrentEntity(int currentEntity) {
+        DragonCommand.currentEntity = currentEntity;
+    }
+
+    private static Player player;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
         //Ini
         World end = RdManager.getWorld();
-        Player player = (Player)commandSender;
+        player = (Player)commandSender;
         Inventory inventory = player.getInventory();
         Map<Material, Integer> materials = new HashMap<>();
         for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
@@ -88,21 +107,6 @@ public class DragonCommand implements CommandExecutor {
         for(Sample sample : BuildManager.getSamples()){
             BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
         }
-        for(RdEntity entity : BuildManager.getEntities()){
-            BuildManager.loadEntity(entity, RdManager.getWorld());
-        }
-
-        //Respawning
-        EnderDragon dragon = (EnderDragon) end.spawnEntity(new Location(RdManager.getWorld(), 0, 74, 0), EntityType.ENDER_DRAGON);
-        dragon.setAI(true);
-        dragon.setPhase(EnderDragon.Phase.CIRCLING);
-        dragon.setHealth(200);
-
-        //Starting fight and bar actualisation task
-        DragonFight task = new DragonFight();
-        taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(),task, 0, 1);
-
-        player.sendMessage(ChatColor.GREEN + Lang.get("fightStarting"));
 
         //Remove items from player inv
         for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
@@ -139,9 +143,70 @@ public class DragonCommand implements CommandExecutor {
             materials.put(material, quantity);
         }
 
-        RdManager.actualiseFightStatue();
+        currentEntity = 0;
+        taskid2 = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+
+                if(currentEntity >= BuildManager.getEntities().size()){
+                    Bukkit.getScheduler().cancelTask(getTaskid2());
+                    finish();
+                }
+                else{
+
+                    BuildManager.loadEntity(BuildManager.getEntities().get(getCurrentEntity()), RdManager.getWorld());
+                    setCurrentEntity(getCurrentEntity()+1);
+                }
+
+
+            }
+        }, 0, 15);
 
         return true;
+    }
+
+    private static void finish(){
+
+        //Ini
+        World end = RdManager.getWorld();
+
+        //Particles
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(200, 0, 0), 5);
+
+        Location from = new Location(end, 0.5, 66, 0.5);
+        Location to = new Location(end, 0.5, 70, 0.5);
+        double space = 0.1;
+        double distance = from.distance(to);
+
+        Vector start = from.toVector();
+        Vector finish = to.toVector();
+
+        Vector vector = finish.clone().subtract(start).normalize().multiply(space);
+
+        double covered = 0;
+
+        for (; covered < distance; start.add(vector)) {
+
+            end.spawnParticle(Particle.REDSTONE, start.getX(), start.getY(), start.getZ(), 10, dustOptions);
+
+            covered += space;
+        }
+
+        end.playSound(new Location(RdManager.getWorld(), 0, 70, 0), Sound.ENTITY_GENERIC_EXPLODE, 10, 29);
+
+        //Respawning
+        EnderDragon dragon = (EnderDragon) end.spawnEntity(new Location(RdManager.getWorld(), 0, 74, 0), EntityType.ENDER_DRAGON);
+        dragon.setAI(true);
+        dragon.setPhase(EnderDragon.Phase.CIRCLING);
+        dragon.setHealth(200);
+
+        //Starting fight and bar actualisation task
+        DragonFight task = new DragonFight();
+        taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(),task, 0, 1);
+
+        player.sendMessage(ChatColor.GREEN + Lang.get("fightStarting"));
+
+        RdManager.actualiseFightStatue();
     }
 
 }
