@@ -26,5 +26,4 @@
 ## V1.2.0
 
 [+] Adding Ender Dragon spawn effect
-
 [*] Fixed server restart bug
