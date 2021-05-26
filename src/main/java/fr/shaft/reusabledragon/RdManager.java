@@ -317,6 +317,11 @@ public class RdManager {
         }
     }
 
+    //Git test
+    private static void gitTest(){
+        System.out.println("This is a test");
+    }
+
 
 
 
