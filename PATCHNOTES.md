@@ -1,4 +1,4 @@
-# Patchnotes !
+# Patchnotes
 
 - [-] Removed a feature
 - [+] Added a feature
