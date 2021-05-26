@@ -218,7 +218,7 @@ public class BuildManager {
 
     public static void loadEntity(RdEntity entity, World world){
 
-        //particle config
+        //particle configuration
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(204, 0, 255), 2);
 
         Location from = new Location(world, 0.5, 66, 0.5);
