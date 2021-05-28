@@ -41,7 +41,3 @@ Customise your config file with the instructions above every lines
 ### thank you for downloading Reusable Dragon
 
 If you want to contact me : discord :arrow_right: Shaft#3796
-
-### coming soon 
-
-Big update ! Bug Fix & 3 boss difficulties with customs rewards. Coming soon :D
