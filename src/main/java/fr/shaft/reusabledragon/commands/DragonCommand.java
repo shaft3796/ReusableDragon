@@ -5,29 +5,33 @@ import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.RdEntity;
 import fr.shaft.reusabledragon.build.Sample;
+import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.boss.BarColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zoglin;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DragonCommand implements CommandExecutor {
 
+    //ATTRIBUTS
     private static int taskid;
     public static int getTaskid() {
         return taskid;
-    }
-    public static void setTaskid(int taskid) {
-        DragonCommand.taskid = taskid;
     }
 
     private static int taskid2;
@@ -44,29 +48,52 @@ public class DragonCommand implements CommandExecutor {
     }
 
     private static Player player;
+    private static World end = RdManager.getWorld();
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    private static Map<Material, Integer> materials;
 
-        //Ini
-        World end = RdManager.getWorld();
-        player = (Player)commandSender;
-        Inventory inventory = player.getInventory();
-        Map<Material, Integer> materials = new HashMap<>();
-        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
-            materials.put(entry.getKey(), entry.getValue());
+    private static boolean DISABLE = false;
+
+    //HANDLERS
+    private static void difficultyHandler(String[] args){
+
+        if(args.length < 1){
+
+            Difficulty.setCurrentDifficulty(Difficulty.EASY);
+
+        }else if(args[0].equalsIgnoreCase(Difficulty.EASY.getStringValue())){
+
+            Difficulty.setCurrentDifficulty(Difficulty.EASY);
+
+        }else if(args[0].equalsIgnoreCase(Difficulty.MEDIUM.getStringValue())){
+
+            Difficulty.setCurrentDifficulty(Difficulty.MEDIUM);
+
+        }else if(args[0].equalsIgnoreCase(Difficulty.HARD.getStringValue())){
+
+            Difficulty.setCurrentDifficulty(Difficulty.HARD);
+
+        }else{
+            Difficulty.setCurrentDifficulty(Difficulty.EASY);
         }
 
-        //Check if a battle is currently active
+    }
+    private static boolean postCondHandler(){
+
+        //Ini
+        boolean spawnable = true;
+        Inventory inventory = player.getInventory();
+
+        //Fight statue
         RdManager.actualiseFightStatue();
         if(RdManager.getFightStatue()){
 
             player.sendMessage(ChatColor.RED + Lang.get("dragonStillAlive"));
-            return true;
+            return false;
         }
 
-        //Check if player can spawn the dragon
-        boolean spawnable = true;
+        //Material check
+        Map<Material, Integer> checkedMaterials = new HashMap<>();
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
             int quantity = entry.getValue();
@@ -86,12 +113,11 @@ public class DragonCommand implements CommandExecutor {
                 }
             }
 
-            materials.remove(material);
-            materials.put(material, quantity);
+            checkedMaterials.put(material, quantity);
         }
-        for(Map.Entry<Material, Integer> entry : materials.entrySet()){
+        for(Map.Entry<Material, Integer> entry : checkedMaterials.entrySet()){
 
-            if (!(entry.getValue() <= 0)) {
+            if (entry.getValue() > 0) {
 
                 spawnable = false;
                 break;
@@ -99,19 +125,15 @@ public class DragonCommand implements CommandExecutor {
         }
         if(!spawnable){
             player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
-            return true;
+            DISABLE = false;
+            return false;
         }
+        return true;
 
-        //build arena
-        BuildManager.generateSamples();
-        for(Sample sample : BuildManager.getSamples()){
-            BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
-        }
+    }
+    private static void inventoryHandler(){
 
-        //Remove items from player inv
-        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
-            materials.put(entry.getKey(), entry.getValue());
-        }
+        Inventory inventory = player.getInventory();
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
             int quantity = entry.getValue();
@@ -139,9 +161,10 @@ public class DragonCommand implements CommandExecutor {
                 }
             }
 
-            materials.remove(material);
-            materials.put(material, quantity);
         }
+
+    }
+    private static void endCrystalHandler(){
 
         currentEntity = 0;
         taskid2 = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(), new Runnable() {
@@ -162,15 +185,9 @@ public class DragonCommand implements CommandExecutor {
             }
         }, 0, 15);
 
-        return true;
     }
+    private static void dragonSpawnParticlesHandler(){
 
-    private static void finish(){
-
-        //Ini
-        World end = RdManager.getWorld();
-
-        //Particles
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(200, 0, 0), 5);
 
         Location from = new Location(end, 0.5, 66, 0.5);
@@ -194,19 +211,72 @@ public class DragonCommand implements CommandExecutor {
 
         end.playSound(new Location(RdManager.getWorld(), 0, 70, 0), Sound.ENTITY_GENERIC_EXPLODE, 10, 29);
 
+    }
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+
+        //multi command disabler
+        if(DISABLE){
+            return true;
+        }
+
+        DISABLE = true;
+
+        //Difficulty
+        difficultyHandler(strings);
+
+        //Ini
+        player = (Player)commandSender;
+        materials = RdManager.getRequiredMaterials().get(Difficulty.getDifficulty());
+
+        //PostCond
+        if(!postCondHandler()){
+            return true;
+        }
+
+        //build arena
+        BuildManager.generateSamples();
+        for(Sample sample : BuildManager.getSamples()){
+            BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
+        }
+
+        //Remove Items
+        inventoryHandler();
+
+        //End Crystals
+        endCrystalHandler();
+
+        return true;
+    }
+
+    private static void finish(){
+
+        //Ini
+        double life = Difficulty.getDifficulty().getLife();
+        BarColor color = Difficulty.getDifficulty().getBarColor();
+        String name = Difficulty.getDifficulty().getNameColor() + Difficulty.getDifficulty().getName();
+
+        //Particles
+        dragonSpawnParticlesHandler();
+
         //Respawning
         EnderDragon dragon = (EnderDragon) end.spawnEntity(new Location(RdManager.getWorld(), 0, 74, 0), EntityType.ENDER_DRAGON);
         dragon.setAI(true);
         dragon.setPhase(EnderDragon.Phase.CIRCLING);
-        dragon.setHealth(200);
+        dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(life);
+        dragon.setHealth(life);
 
         //Starting fight and bar actualisation task
+        RdManager.createBar(name, color);
         DragonFight task = new DragonFight();
         taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(),task, 0, 1);
 
         player.sendMessage(ChatColor.GREEN + Lang.get("fightStarting"));
 
         RdManager.actualiseFightStatue();
+
+        DISABLE = false;
     }
 
 }

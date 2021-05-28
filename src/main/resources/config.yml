@@ -35,7 +35,14 @@ battleArenaEnd: "50 110 50"
 #  - "Material quantity"
 
 required:
-  - "END_CRYSTAL 4"
+  easy:
+    - "END_CRYSTAL 4"
+  medium:
+    - "END_CRYSTAL 4"
+  hard:
+    - "END_CRYSTAL 4"
+
+
 
 #Rewards which will be earned by players, "<Material ( above )>; <quantity given>; <probability in %>; <true: each player has the given probability of obtaining the reward, false: if the reward appears it will be randomly given to a player>"
 
@@ -52,7 +59,13 @@ required:
 #false: if the reward appears it will be randomly given to a player so only one player can win the rewards
 
 rewards:
-  - "DRAGON_EGG; 1; 5.0; false"
+  easy:
+    - "DRAGON_EGG; 1; 5.0; false"
+  medium:
+    - "DRAGON_EGG; 1; 10.0; false"
+  hard:
+    - "DRAGON_EGG; 1; 15.0; false"
+
 
 #select your languages ! you can create your own translations
 

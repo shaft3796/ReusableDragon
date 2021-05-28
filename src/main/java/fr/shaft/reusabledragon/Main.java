@@ -50,9 +50,6 @@ public class Main extends JavaPlugin {
         //Server alert
         System.out.println("Reusable dragon shutting down . .");
 
-        //Clear boss bar
-        RdManager.getBar().removeAll();
-
     }
 
 }
