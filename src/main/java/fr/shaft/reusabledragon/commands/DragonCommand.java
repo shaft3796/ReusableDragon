@@ -50,6 +50,8 @@ public class DragonCommand implements CommandExecutor {
 
     private static Map<Material, Integer> materials = new HashMap<>();
 
+    private static boolean DISABLE = false;
+
     //HANDLERS
     private static void difficultyHandler(String[] args){
 
@@ -69,6 +71,8 @@ public class DragonCommand implements CommandExecutor {
 
             Difficulty.setCurrentDifficulty(Difficulty.HARD);
 
+        }else{
+            Difficulty.setCurrentDifficulty(Difficulty.EASY);
         }
 
     }
@@ -213,6 +217,13 @@ public class DragonCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
+        //multi command disabler
+        if(DISABLE){
+            return true;
+        }
+
+        DISABLE = true;
+
         //Ini
         player = (Player)commandSender;
         Inventory inventory = player.getInventory();
@@ -268,6 +279,8 @@ public class DragonCommand implements CommandExecutor {
         player.sendMessage(ChatColor.GREEN + Lang.get("fightStarting"));
 
         RdManager.actualiseFightStatue();
+
+        DISABLE = false;
     }
 
 }

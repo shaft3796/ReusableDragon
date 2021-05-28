@@ -18,6 +18,15 @@ import java.util.Objects;
 import java.util.Random;
 
 public class DragonFight implements Runnable{
+
+    private static final World end = RdManager.getWorld();
+    private static BossBar bar;
+
+    public DragonFight(){
+
+        bar = RdManager.getBar();
+    }
+
     @Override
     public void run() {
 
@@ -25,8 +34,6 @@ public class DragonFight implements Runnable{
         double health = 0.0;
         double maxhealth = Difficulty.getDifficulty().getLife();
         boolean alive = false;
-        World end = RdManager.getWorld();
-        BossBar bar = RdManager.getBar();
 
         //Update
         for(Entity entity : end.getEntities()) {
@@ -34,6 +41,7 @@ public class DragonFight implements Runnable{
                 EnderDragon dragon = (EnderDragon)entity;
                 health = dragon.getHealth();
                 alive = true;
+                RdManager.actualiseFightStatue();
             }
         }
 
@@ -60,6 +68,7 @@ public class DragonFight implements Runnable{
                 //rewards
                 ArrayList<Player> players = new ArrayList<>();
 
+                //preparing player list
                 for(Player pl : RdManager.getWorld().getPlayers()){
 
                     if(RdManager.inArea(RdManager.getBattleArenaRoots(),RdManager.getBattleArenaEnd(), player.getLocation())){
@@ -69,6 +78,8 @@ public class DragonFight implements Runnable{
                     }
 
                 }
+
+                //reward
                 for(String[] reward : RdManager.getRewards()){
 
                     if(Boolean.parseBoolean(reward[3])){

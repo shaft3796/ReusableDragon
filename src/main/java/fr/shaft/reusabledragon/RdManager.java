@@ -3,6 +3,7 @@ package fr.shaft.reusabledragon;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
+import fr.shaft.reusabledragon.listeners.OnDamage;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
 import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.*;
@@ -47,7 +48,7 @@ public class RdManager {
     }
 
     //boss bar
-    private static KeyedBossBar bar;
+    private static BossBar bar;
     public static BossBar getBar() {
         return bar;
     }
@@ -161,6 +162,7 @@ public class RdManager {
 
         //Player Build ( place / break ) Event
         plugin.getServer().getPluginManager().registerEvents(new OnPlayerBuild(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new OnDamage(), plugin);
     }
 
     //register required materials
@@ -317,7 +319,7 @@ public class RdManager {
     //BossBar
     public static void createBar(String name, BarColor barColor){
 
-            bar = Bukkit.createBossBar(new NamespacedKey(plugin, "ReBar"),name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
+            bar = Bukkit.createBossBar(name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
 
     }
 
