@@ -3,6 +3,7 @@ package fr.shaft.reusabledragon;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
+import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.listeners.OnDamage;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
 import fr.shaft.reusabledragon.task.DragonFight;
@@ -30,14 +31,14 @@ public class RdManager {
     }
 
     //required materials
-    private static final Map<Material, Integer> requiredMaterials = new HashMap<>();
-    public static Map<Material, Integer> getRequiredMaterials() {
+    private static final  Map<Difficulty, Map<Material, Integer>> requiredMaterials = new HashMap<>();
+    public static  Map<Difficulty, Map<Material, Integer>> getRequiredMaterials() {
         return requiredMaterials;
     }
 
     //rewards
-    private static final ArrayList<String[]> rewards = new ArrayList<>();
-    public static ArrayList<String[]> getRewards() {
+    private static final Map<Difficulty, ArrayList<String[]>> rewards = new HashMap<>();
+    public static Map<Difficulty, ArrayList<String[]>> getRewards() {
         return rewards;
     }
 
@@ -170,22 +171,29 @@ public class RdManager {
 
         FileConfiguration config = plugin.getConfig();
 
-        for(String string : config.getStringList("required")){
+        for(Difficulty difficulty : Difficulty.values()){
 
-            String[] words = string.split(" ");
-            Material material = Material.getMaterial(words[0]);
-            if(material != null){
+            Map<Material, Integer> materials = new HashMap<>();
+            for(String string : config.getStringList("required." + difficulty.getStringValue())){
 
-                int quantity = Integer.parseInt(words[1]);
-                if(quantity > 0){
+                String[] words = string.split(" ");
+                Material material = Material.getMaterial(words[0]);
+                if(material != null){
 
-                    requiredMaterials.put(material, quantity);
+                    int quantity = Integer.parseInt(words[1]);
+                    if(quantity > 0){
+
+                        materials.put(material, quantity);
+
+                    }
 
                 }
 
             }
 
+            requiredMaterials.put(difficulty, materials);
         }
+
     }
 
     //world registration
@@ -199,13 +207,21 @@ public class RdManager {
         //Ini
         FileConfiguration config = plugin.getConfig();
 
-        for(String string : config.getStringList("rewards")){
+        for(Difficulty difficulty : Difficulty.values()){
 
-            String[] words = string.split("; ");
+            ArrayList<String[]> reward = new ArrayList<>();
 
-            rewards.add(words);
+            for(String string : config.getStringList("rewards." + difficulty.getStringValue())){
+
+                String[] words = string.split("; ");
+
+                reward.add(words);
             }
+
+            rewards.put(difficulty,reward);
         }
+
+    }
 
     //locations registration
     private static void locationsRegistration(){

@@ -17,10 +17,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zoglin;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +50,7 @@ public class DragonCommand implements CommandExecutor {
     private static Player player;
     private static World end = RdManager.getWorld();
 
-    private static Map<Material, Integer> materials = new HashMap<>();
+    private static Map<Material, Integer> materials;
 
     private static boolean DISABLE = false;
 
@@ -82,6 +84,7 @@ public class DragonCommand implements CommandExecutor {
         boolean spawnable = true;
         Inventory inventory = player.getInventory();
 
+        //Fight statue
         RdManager.actualiseFightStatue();
         if(RdManager.getFightStatue()){
 
@@ -89,6 +92,8 @@ public class DragonCommand implements CommandExecutor {
             return false;
         }
 
+        //Material check
+        Map<Material, Integer> checkedMaterials = new HashMap<>();
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
             int quantity = entry.getValue();
@@ -108,12 +113,11 @@ public class DragonCommand implements CommandExecutor {
                 }
             }
 
-            materials.remove(material);
-            materials.put(material, quantity);
+            checkedMaterials.put(material, quantity);
         }
-        for(Map.Entry<Material, Integer> entry : materials.entrySet()){
+        for(Map.Entry<Material, Integer> entry : checkedMaterials.entrySet()){
 
-            if (!(entry.getValue() <= 0)) {
+            if (entry.getValue() > 0) {
 
                 spawnable = false;
                 break;
@@ -129,10 +133,6 @@ public class DragonCommand implements CommandExecutor {
     private static void inventoryHandler(){
 
         Inventory inventory = player.getInventory();
-        materials = new HashMap<>();
-        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
-            materials.put(entry.getKey(), entry.getValue());
-        }
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
             int quantity = entry.getValue();
@@ -160,8 +160,6 @@ public class DragonCommand implements CommandExecutor {
                 }
             }
 
-            materials.remove(material);
-            materials.put(material, quantity);
         }
 
     }
@@ -226,10 +224,7 @@ public class DragonCommand implements CommandExecutor {
 
         //Ini
         player = (Player)commandSender;
-        Inventory inventory = player.getInventory();
-        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
-            materials.put(entry.getKey(), entry.getValue());
-        }
+        materials = RdManager.getRequiredMaterials().get(Difficulty.getDifficulty());
 
         //Difficulty
         difficultyHandler(strings);

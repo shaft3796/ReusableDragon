@@ -80,7 +80,7 @@ public class DragonFight implements Runnable{
                 }
 
                 //reward
-                for(String[] reward : RdManager.getRewards()){
+                for(String[] reward : RdManager.getRewards().get(Difficulty.getDifficulty())){
 
                     if(Boolean.parseBoolean(reward[3])){
 
