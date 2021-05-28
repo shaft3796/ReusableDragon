@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class DragonCommand implements CommandExecutor {
 
+    //ATTRIBUTS
     private static int taskid;
     public static int getTaskid() {
         return taskid;
@@ -45,48 +46,45 @@ public class DragonCommand implements CommandExecutor {
     }
 
     private static Player player;
+    private static World end = RdManager.getWorld();
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    private static Map<Material, Integer> materials = new HashMap<>();
 
-        //Ini
-        World end = RdManager.getWorld();
-        player = (Player)commandSender;
-        Inventory inventory = player.getInventory();
-        Map<Material, Integer> materials = new HashMap<>();
-        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
-            materials.put(entry.getKey(), entry.getValue());
-        }
+    //HANDLERS
+    private static void difficultyHandler(String[] args){
 
-        //Difficulty
-        if(strings.length < 1){
+        if(args.length < 1){
 
             Difficulty.setCurrentDifficulty(Difficulty.EASY);
 
-        }else if(strings[0].equalsIgnoreCase(Difficulty.EASY.getStringValue())){
+        }else if(args[0].equalsIgnoreCase(Difficulty.EASY.getStringValue())){
 
             Difficulty.setCurrentDifficulty(Difficulty.EASY);
 
-        }else if(strings[0].equalsIgnoreCase(Difficulty.MEDIUM.getStringValue())){
+        }else if(args[0].equalsIgnoreCase(Difficulty.MEDIUM.getStringValue())){
 
             Difficulty.setCurrentDifficulty(Difficulty.MEDIUM);
 
-        }else if(strings[0].equalsIgnoreCase(Difficulty.HARD.getStringValue())){
+        }else if(args[0].equalsIgnoreCase(Difficulty.HARD.getStringValue())){
 
             Difficulty.setCurrentDifficulty(Difficulty.HARD);
 
         }
 
-        //Check if a battle is currently active
+    }
+    private static boolean postCondHandler(){
+
+        //Ini
+        boolean spawnable = true;
+        Inventory inventory = player.getInventory();
+
         RdManager.actualiseFightStatue();
         if(RdManager.getFightStatue()){
 
             player.sendMessage(ChatColor.RED + Lang.get("dragonStillAlive"));
-            return true;
+            return false;
         }
 
-        //Check if player can spawn the dragon
-        boolean spawnable = true;
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
             int quantity = entry.getValue();
@@ -119,16 +117,15 @@ public class DragonCommand implements CommandExecutor {
         }
         if(!spawnable){
             player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
-            return true;
+            return false;
         }
+        return true;
 
-        //build arena
-        BuildManager.generateSamples();
-        for(Sample sample : BuildManager.getSamples()){
-            BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
-        }
+    }
+    private static void inventoryHandler(){
 
-        //Remove items from player inv
+        Inventory inventory = player.getInventory();
+        materials = new HashMap<>();
         for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
             materials.put(entry.getKey(), entry.getValue());
         }
@@ -163,6 +160,9 @@ public class DragonCommand implements CommandExecutor {
             materials.put(material, quantity);
         }
 
+    }
+    private static void endCrystalHandler(){
+
         currentEntity = 0;
         taskid2 = Bukkit.getScheduler().scheduleSyncRepeatingTask(RdManager.getPlugin(), new Runnable() {
             @Override
@@ -182,18 +182,9 @@ public class DragonCommand implements CommandExecutor {
             }
         }, 0, 15);
 
-        return true;
     }
+    private static void dragonSpawnParticlesHandler(){
 
-    private static void finish(){
-
-        //Ini
-        World end = RdManager.getWorld();
-        double life = Difficulty.getDifficulty().getLife();
-        BarColor color = Difficulty.getDifficulty().getBarColor();
-        String name = Difficulty.getDifficulty().getNameColor() + Difficulty.getDifficulty().getName();
-
-        //Particles
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(200, 0, 0), 5);
 
         Location from = new Location(end, 0.5, 66, 0.5);
@@ -217,8 +208,52 @@ public class DragonCommand implements CommandExecutor {
 
         end.playSound(new Location(RdManager.getWorld(), 0, 70, 0), Sound.ENTITY_GENERIC_EXPLODE, 10, 29);
 
-        //Respawning
+    }
 
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+
+        //Ini
+        player = (Player)commandSender;
+        Inventory inventory = player.getInventory();
+        for(Map.Entry<Material, Integer> entry : RdManager.getRequiredMaterials().entrySet()){
+            materials.put(entry.getKey(), entry.getValue());
+        }
+
+        //Difficulty
+        difficultyHandler(strings);
+
+        //PostCond
+        if(!postCondHandler()){
+            return true;
+        }
+
+        //build arena
+        BuildManager.generateSamples();
+        for(Sample sample : BuildManager.getSamples()){
+            BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
+        }
+
+        //Remove Items
+        inventoryHandler();
+
+        //End Crystals
+        endCrystalHandler();
+
+        return true;
+    }
+
+    private static void finish(){
+
+        //Ini
+        double life = Difficulty.getDifficulty().getLife();
+        BarColor color = Difficulty.getDifficulty().getBarColor();
+        String name = Difficulty.getDifficulty().getNameColor() + Difficulty.getDifficulty().getName();
+
+        //Particles
+        dragonSpawnParticlesHandler();
+
+        //Respawning
         EnderDragon dragon = (EnderDragon) end.spawnEntity(new Location(RdManager.getWorld(), 0, 74, 0), EntityType.ENDER_DRAGON);
         dragon.setAI(true);
         dragon.setPhase(EnderDragon.Phase.CIRCLING);
