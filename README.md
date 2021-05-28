@@ -13,6 +13,7 @@ Free &amp; open source Spigot plugin
 - Main end island protection to prevent grief, battle arena protection disable during fight
 - dragon spawning with /dragon & required spawning materials fully customisable
 - Rewards and their probabilities fully customisable
+- 3 difficulties fully customisable with custom boss bar rewards and required materials per difficulties
 
 ### How to setup Re Dragon ?
 

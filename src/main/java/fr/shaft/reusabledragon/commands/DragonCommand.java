@@ -48,6 +48,7 @@ public class DragonCommand implements CommandExecutor {
     }
 
     private static Player player;
+
     private static World end = RdManager.getWorld();
 
     private static Map<Material, Integer> materials;

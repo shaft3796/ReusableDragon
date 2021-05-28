@@ -27,3 +27,13 @@
 
 [+] Adding Ender Dragon spawn effect
 [*] Fixed server restart bug
+
+## V2.0.0
+
+Big update
+
+[+] Adding new difficulty system ! 3 difficulty with custom bossbar,dragon attributes, spawn materials & rewards per difficulties
+[*] Fixed server crash
+[*] Fixed multiple required materials & rewards bug
+[^] optimisations
+
