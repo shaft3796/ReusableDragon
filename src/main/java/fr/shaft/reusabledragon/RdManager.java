@@ -5,10 +5,7 @@ import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
 import fr.shaft.reusabledragon.task.DragonFight;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -50,7 +47,7 @@ public class RdManager {
     }
 
     //boss bar
-    private static BossBar bar = Bukkit.createBossBar("EnderDragon", BarColor.PINK, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
+    private static KeyedBossBar bar;
     public static BossBar getBar() {
         return bar;
     }
@@ -315,6 +312,13 @@ public class RdManager {
 
             }
         }
+    }
+
+    //BossBar
+    public static void createBar(String name, BarColor barColor){
+
+            bar = Bukkit.createBossBar(new NamespacedKey(plugin, "ReBar"),name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
+
     }
 
 

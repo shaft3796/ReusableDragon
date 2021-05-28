@@ -5,6 +5,7 @@ import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.Sample;
 import fr.shaft.reusabledragon.commands.DragonCommand;
+import fr.shaft.reusabledragon.enumerations.Difficulty;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.EnderDragon;
@@ -20,12 +21,14 @@ public class DragonFight implements Runnable{
     @Override
     public void run() {
 
+        //INI
         double health = 0.0;
-        double maxhealth = 200.0;
+        double maxhealth = Difficulty.getDifficulty().getLife();
         boolean alive = false;
         World end = RdManager.getWorld();
         BossBar bar = RdManager.getBar();
 
+        //Update
         for(Entity entity : end.getEntities()) {
             if(entity instanceof EnderDragon) {
                 EnderDragon dragon = (EnderDragon)entity;
@@ -34,18 +37,22 @@ public class DragonFight implements Runnable{
             }
         }
 
+        //Main
         for(Player player : Bukkit.getOnlinePlayers()) {
+
+            //Update bar
             if(player.getWorld() == end && alive) {
                 bar.addPlayer(player);
             } else {
                 bar.removePlayer(player);
             }
 
+            //Update status & stop fight
             if(!alive){
                 RdManager.actualiseFightStatue();
                 Bukkit.getScheduler().cancelTask(DragonCommand.getTaskid());
 
-                //regen
+                //regen arena
                 for(Sample sample : BuildManager.getSamples()){
                     BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
                 }
@@ -109,6 +116,7 @@ public class DragonFight implements Runnable{
                 }
             }
 
+            //Update bar progress
             bar.setProgress(health / maxhealth);
             if(bar.getProgress() == 0.0) {
                 bar.removeAll();

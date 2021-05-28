@@ -5,7 +5,7 @@ commands:
   dragon:
     description: "Run the spawning of the ender dragon"
     permission: dragon.use
-    usage: "Usage: /dragon"
+    usage: "Usage: /dragon <difficulty> ( easy medium hard )"
   rdsave:
     description: "Save to persistent data the dragon area"
     permission: rdsave.use
