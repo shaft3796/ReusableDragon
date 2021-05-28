@@ -125,6 +125,7 @@ public class DragonCommand implements CommandExecutor {
         }
         if(!spawnable){
             player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
+            DISABLE = false;
             return false;
         }
         return true;
@@ -222,12 +223,12 @@ public class DragonCommand implements CommandExecutor {
 
         DISABLE = true;
 
+        //Difficulty
+        difficultyHandler(strings);
+
         //Ini
         player = (Player)commandSender;
         materials = RdManager.getRequiredMaterials().get(Difficulty.getDifficulty());
-
-        //Difficulty
-        difficultyHandler(strings);
 
         //PostCond
         if(!postCondHandler()){
