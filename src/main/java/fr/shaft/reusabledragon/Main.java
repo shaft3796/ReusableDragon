@@ -16,7 +16,7 @@ public class Main extends JavaPlugin {
 
         //Updater
         Logger logger = this.getLogger();
-        new UpdateChecker(this, 12345).getVersion(version -> {
+        new UpdateChecker(this, 92504).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 logger.info("There is not a new update available.");
             } else {

@@ -41,3 +41,6 @@ Big update
 
 [+] Adding plugin updater
 
+## V2.0.2
+
+[*] Fixed updater
