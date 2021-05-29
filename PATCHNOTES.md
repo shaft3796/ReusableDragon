@@ -37,3 +37,7 @@ Big update
 [*] Fixed multiple required materials & rewards bug
 [^] optimisations
 
+## V2.0.1
+
+[+] Adding plugin updater
+

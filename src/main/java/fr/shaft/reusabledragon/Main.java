@@ -6,12 +6,23 @@ import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 
 public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        //Updater
+        Logger logger = this.getLogger();
+        new UpdateChecker(this, 12345).getVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("There is not a new update available.");
+            } else {
+                logger.info("There is a new update available.");
+            }
+        });
 
         //Server alert
         System.out.println("Reusable dragon starting . .");
