@@ -9,8 +9,8 @@ public enum Difficulty {
     MEDIUM (400.0, 20.0, "Medium Dragon", BarColor.PURPLE, ChatColor.DARK_PURPLE, "medium"),
     HARD (800.0, 30.0, "Hard Dragon", BarColor.RED, ChatColor.DARK_RED, "hard");
 
-    private final double life;
-    private final double damage;
+    private double life;
+    private double damage;
     private final String name;
     private final BarColor barColor;
     private final ChatColor nameColor;
@@ -19,8 +19,12 @@ public enum Difficulty {
     public double getLife() {
         return life;
     }
+    public void setLife(Double life) {this.life = life;}
     public double getDamage() {
         return damage;
+    }
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
     public ChatColor getNameColor() {
         return nameColor;
@@ -51,6 +55,7 @@ public enum Difficulty {
         this.nameColor = chatColor;
         this.damage = damage;
         this.stringValue = stringValue;
+
 
     }
 

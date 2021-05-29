@@ -26,44 +26,51 @@ public class RdManager {
 
     //plugin
     private static JavaPlugin plugin;
-    public static JavaPlugin getPlugin(){
+
+    public static JavaPlugin getPlugin() {
         return plugin;
     }
 
     //required materials
-    private static final  Map<Difficulty, Map<Material, Integer>> requiredMaterials = new HashMap<>();
-    public static  Map<Difficulty, Map<Material, Integer>> getRequiredMaterials() {
+    private static final Map<Difficulty, Map<Material, Integer>> requiredMaterials = new HashMap<>();
+
+    public static Map<Difficulty, Map<Material, Integer>> getRequiredMaterials() {
         return requiredMaterials;
     }
 
     //rewards
     private static final Map<Difficulty, ArrayList<String[]>> rewards = new HashMap<>();
+
     public static Map<Difficulty, ArrayList<String[]>> getRewards() {
         return rewards;
     }
 
     //End
     private static World world;
+
     public static World getWorld() {
         return world;
     }
 
     //boss bar
     private static BossBar bar;
+
     public static BossBar getBar() {
         return bar;
     }
 
     //Fight Statue
     private static boolean fightStatue;
+
     public static boolean getFightStatue() {
         return fightStatue;
     }
-    public static boolean actualiseFightStatue(){
+
+    public static boolean actualiseFightStatue() {
 
         boolean check = false;
         assert world != null;
-        for(Entity entity : world.getEntities()){
+        for (Entity entity : world.getEntities()) {
 
             if (entity instanceof EnderDragon) {
                 check = true;
@@ -78,28 +85,33 @@ public class RdManager {
 
     //End protection
     private static Location noBuildLandRoots;
+
     public static Location getNoBuildLandRoots() {
         return noBuildLandRoots;
     }
 
     private static Location noBuildLandEnd;
+
     public static Location getNoBuildLandEnd() {
         return noBuildLandEnd;
     }
 
     //Battle Arena
     private static Location battleArenaRoots;
+
     public static Location getBattleArenaRoots() {
         return battleArenaRoots;
     }
 
     private static Location battleArenaEnd;
+
     public static Location getBattleArenaEnd() {
         return battleArenaEnd;
     }
 
     //Lang
     private static String lang;
+
     public static String getLang() {
         return lang;
     }
@@ -108,10 +120,13 @@ public class RdManager {
           Build
     ---------------*/
 
-    public RdManager(JavaPlugin pl){
+    public RdManager(JavaPlugin pl) {
 
         //Ini
         plugin = pl;
+
+        //Dragon attributes
+        registerDragonAttributes();
 
         //Lang registration
         langRegistration();
@@ -151,7 +166,7 @@ public class RdManager {
      ---------------*/
 
     //Commands
-    private static void registerCommands(){
+    private static void registerCommands() {
 
         plugin.getCommand("dragon").setExecutor(new DragonCommand());
         plugin.getCommand("rdsave").setExecutor((new SaveAreaCommand()));
@@ -159,7 +174,7 @@ public class RdManager {
     }
 
     //Listeners
-    private static void registerListeners(){
+    private static void registerListeners() {
 
         //Player Build ( place / break ) Event
         plugin.getServer().getPluginManager().registerEvents(new OnPlayerBuild(), plugin);
@@ -167,21 +182,21 @@ public class RdManager {
     }
 
     //register required materials
-    private static void registerMaterials(){
+    private static void registerMaterials() {
 
         FileConfiguration config = plugin.getConfig();
 
-        for(Difficulty difficulty : Difficulty.values()){
+        for (Difficulty difficulty : Difficulty.values()) {
 
             Map<Material, Integer> materials = new HashMap<>();
-            for(String string : config.getStringList("required." + difficulty.getStringValue())){
+            for (String string : config.getStringList("required." + difficulty.getStringValue())) {
 
                 String[] words = string.split(" ");
                 Material material = Material.getMaterial(words[0]);
-                if(material != null){
+                if (material != null) {
 
                     int quantity = Integer.parseInt(words[1]);
-                    if(quantity > 0){
+                    if (quantity > 0) {
 
                         materials.put(material, quantity);
 
@@ -197,34 +212,34 @@ public class RdManager {
     }
 
     //world registration
-    private static void worldRegistration(){
+    private static void worldRegistration() {
         world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
     }
 
     //reward registration
-    private static void rewardsRegistration(){
+    private static void rewardsRegistration() {
 
         //Ini
         FileConfiguration config = plugin.getConfig();
 
-        for(Difficulty difficulty : Difficulty.values()){
+        for (Difficulty difficulty : Difficulty.values()) {
 
             ArrayList<String[]> reward = new ArrayList<>();
 
-            for(String string : config.getStringList("rewards." + difficulty.getStringValue())){
+            for (String string : config.getStringList("rewards." + difficulty.getStringValue())) {
 
                 String[] words = string.split("; ");
 
                 reward.add(words);
             }
 
-            rewards.put(difficulty,reward);
+            rewards.put(difficulty, reward);
         }
 
     }
 
     //locations registration
-    private static void locationsRegistration(){
+    private static void locationsRegistration() {
 
         //NO BUILD LAND ROOTS & END
         String str = plugin.getConfig().getString("endProtectionRoots");
@@ -284,14 +299,14 @@ public class RdManager {
     }
 
     //Lang registration
-    private static void langRegistration(){
+    private static void langRegistration() {
 
         lang = plugin.getConfig().getString("language");
 
     }
 
     //Player in area
-    public static boolean inArea(Location roots, Location end, Location pos){
+    public static boolean inArea(Location roots, Location end, Location pos) {
 
         //Ini
         int inirootX = roots.getBlockX();
@@ -320,11 +335,11 @@ public class RdManager {
     }
 
     //Dragon Checking
-    private static void dragonChecking(){
+    private static void dragonChecking() {
 
-        for(Entity entity : world.getEntities()){
+        for (Entity entity : world.getEntities()) {
 
-            if(entity instanceof EnderDragon || entity instanceof EnderCrystal){
+            if (entity instanceof EnderDragon || entity instanceof EnderCrystal) {
 
                 entity.remove();
 
@@ -333,14 +348,66 @@ public class RdManager {
     }
 
     //BossBar
-    public static void createBar(String name, BarColor barColor){
+    public static void createBar(String name, BarColor barColor) {
 
-            bar = Bukkit.createBossBar(name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
+        bar = Bukkit.createBossBar(name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
 
     }
 
+    //Dragon Attributes
+    private static void registerDragonAttributes() {
+
+        //Ini
+        FileConfiguration config = plugin.getConfig();
+
+        //EASY
+        String[] words = config.getString("difficulties.easy").split("; ");
+
+        double life = Double.parseDouble(words[0]);
+        if (life < 1.0) {
+            life = 1.0;
+        }
+        double damage = Double.parseDouble(words[1]);
+        if (damage < 1.0) {
+            damage = 1.0;
+        }
+
+        Difficulty.EASY.setLife(life);
+        Difficulty.EASY.setDamage(damage);
+
+        //MEDIUM
+        words = config.getString("difficulties.medium").split("; ");
+
+        life = Double.parseDouble(words[0]);
+        if (life < 1.0) {
+            life = 1.0;
+        }
+        damage = Double.parseDouble(words[1]);
+        if (damage < 1.0) {
+            damage = 1.0;
+        }
+
+        Difficulty.MEDIUM.setLife(life);
+        Difficulty.MEDIUM.setDamage(damage);
+
+
+        //hard
+        words = config.getString("difficulties.hard").split("; ");
+
+        life = Double.parseDouble(words[0]);
+        if (life < 1.0) {
+            life = 1.0;
+        }
+        damage = Double.parseDouble(words[1]);
+        if (damage < 1.0) {
+            damage = 1.0;
+        }
+
+        Difficulty.HARD.setLife(life);
+        Difficulty.HARD.setDamage(damage);
 
 
 
+    }
 
 }
