@@ -1,5 +1,5 @@
 name: ReusableDragon
-version: 2.0.2
+version: 2.0.3
 main: fr.shaft.reusabledragon.Main
 commands:
   dragon:

@@ -44,3 +44,7 @@ Big update
 ## V2.0.2
 
 [*] Fixed updater
+
+## V2.0.3
+
+[+] Adding dragon attributes to config file
