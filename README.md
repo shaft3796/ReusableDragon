@@ -42,7 +42,7 @@ Customise your config file with the instructions above every lines
 /rdsave
 Save the battle arena
 
-/dragon <difficulty>
+/dragon difficulty
 Make the dragon spawn, difficulty is easy medium or hard
 
 -----------------------------------------
