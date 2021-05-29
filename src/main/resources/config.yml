@@ -13,6 +13,12 @@ battleArenaRoots: "-50 50 -50"
 #end of the battle arena zone huge dimensions may cause lag and crash /!\
 battleArenaEnd: "50 110 50"
 
+#You can customise here the damages and the life of the dragon for each difficulties "<life>; <damage>"
+difficulties:
+  easy: "200; 15"
+  medium: "400; 20"
+  hard: "800; 30"
+
 
 #Materials and their quantity required to spawn the dragon with /dragon command you can find the list of the spigot materials here
 #Make sure to only use materials of your version !
