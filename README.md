@@ -37,7 +37,15 @@ Customise your config file with the instructions above every lines
 - /dragon :arrow_right: dragon.use
 - /rdsave :arrow_right: save.use
 
+### Commands
+
+/rdsave
+Save the battle arena
+
+/dragon difficulty
+Make the dragon spawn, difficulty is easy medium or hard
+
 -----------------------------------------
 ### thank you for downloading Reusable Dragon
 
-If you want to contact me : discord :arrow_right: Shaft#3796
+If you want to contact me find help or informations : discord :arrow_right: https://discord.gg/9wBVmneY8x
