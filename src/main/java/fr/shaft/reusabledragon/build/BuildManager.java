@@ -279,8 +279,13 @@ public class BuildManager {
         for(String entityData : firstSplit){
 
             String[] data = entityData.split(";");
-            RdEntity ent = new RdEntity(EntityType.valueOf(data[0]), new Location(world, Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3])));
-            entities.add(ent);
+
+            //PostCond
+            if(!data[0].equals("") && !data[1].equals("") && !data[2].equals("") && !data[3].equals("") ){
+                RdEntity ent = new RdEntity(EntityType.valueOf(data[0]), new Location(world, Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3])));
+                entities.add(ent);
+            }
+
         }
 
     }

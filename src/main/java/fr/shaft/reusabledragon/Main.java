@@ -18,7 +18,7 @@ public class Main extends JavaPlugin {
         Logger logger = this.getLogger();
         new UpdateChecker(this, 92504).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("There is not a new update available.");
+                logger.info("There is no update available.");
             } else {
                 logger.info("There is a new update available.");
             }
@@ -51,6 +51,10 @@ public class Main extends JavaPlugin {
             BuildManager.registerEntities(world);
             BuildManager.saveEntities();
             BuildManager.generateEntities(world);
+        }else{
+            //File loading
+            BuildManager.generateSamples();
+            BuildManager.generateEntities(RdManager.getWorld());
         }
 
     }

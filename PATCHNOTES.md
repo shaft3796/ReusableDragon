@@ -48,3 +48,7 @@ Big update
 ## V2.0.3
 
 [+] Adding dragon attributes to config file
+
+## V2.0.4
+
+[*] Fixed a bug which made impossible the plugin to launch itself

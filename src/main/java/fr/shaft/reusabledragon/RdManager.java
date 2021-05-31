@@ -149,10 +149,6 @@ public class RdManager {
         //commands
         registerCommands();
 
-        //File loading
-        BuildManager.generateSamples();
-        BuildManager.generateEntities(world);
-
         //Fight Statue ini
         fightStatue = actualiseFightStatue();
 
