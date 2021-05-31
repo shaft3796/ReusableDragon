@@ -105,3 +105,17 @@ en:
   youKilledDragon: "[Re Dragon] You killed the dragon !! rewards distribution . ."
   youGot: "You got : "
 
+tr:
+  dragonStillAlive: "[Re Dragon] Ejderha hala yaşıyor !"
+  missingMaterials: "[Re Dragon] Ejderhayı doğurmak için yeterli materiyellere sahip değilsin !"
+  fightStarting: "[Re Dragon] Ejderha savaşı başlatılıyor !"
+  saveDone: "[Re Dragon] Kaydetme başaralı !"
+  breakInBossArea: "[Re Dragon] Hey, buradaki blokları kıramazsın ! Canlı bir boss yok !!"
+  breakInProtectedArea: "[Re Dragon] Hey, buradaki blokları kıramazsın !!"
+  placeInBossArea: "[Re Dragon] Hey, buraya blok koyamazsın ! Canlı bir boss yok !!"
+  placeInProtectedArea: "[Re Dragon] Hey, buraya blok koyamazsın !!"
+  placeUnAuthorizedBlock: "[Re Dragon] Hey, buraya o tür bloklar koyamazsın !!"
+  howToUse: "[Re Dragon] Hey, /dragon komutunu kullanarak ejderhanın doğmasını sağlayabilirsin !!!"
+  youKilledDragon: "[Re Dragon] Ejderhayı öldürdün !! ödül dağıtımı . ."
+  youGot: "Kazandığın : "
+
