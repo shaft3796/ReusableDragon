@@ -9,3 +9,14 @@ check this file to see the lines to add to your existing config file ! Of course
 V2.0.4
 
 Creation of this file
+
+V2.1.0
+
+[+] Added exp control lines, copy/paste it to your config file
+
+#The xp all players who killed the dragon will earn use this link to help you to config your own values
+#https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/82/XP_Per_Level_14w02a.svg/revision/latest?cb=20190719090818
+exp:
+  easy: 500
+  medium: 750
+  hard: 1000
