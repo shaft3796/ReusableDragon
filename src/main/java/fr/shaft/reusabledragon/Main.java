@@ -2,6 +2,7 @@ package fr.shaft.reusabledragon;
 
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.Sample;
+import fr.shaft.reusabledragon.enumerations.Difficulty;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,27 +42,32 @@ public class Main extends JavaPlugin {
         this.saveDefaultConfig();
 
         //Save area if there is no file, to prevent error
-        File area = new File(this.getDataFolder() + "/DATA/" + "Area.rd");
-        File entities = new File(this.getDataFolder() + "/DATA/" + "Entities.rd");
-        if(!area.exists() || !entities.exists() ){
-            //Blocs
-            World world = RdManager.getWorld();
-            BuildManager.sampleRegion(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd());
-            for(Sample sample : BuildManager.getSamples()){
-                BuildManager.registerSamples(sample);
-            }
-            BuildManager.convertSamples(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd());
-            BuildManager.saveSamples();
-            BuildManager.generateSamples();
 
-            //Entities ( crystal )
-            BuildManager.registerEntities(world);
-            BuildManager.saveEntities();
-            BuildManager.generateEntities(world);
-        }else{
-            //File loading
-            BuildManager.generateSamples();
-            BuildManager.generateEntities(RdManager.getWorld());
+        for(Difficulty difficulty : Difficulty.values()){
+
+            File area = new File(this.getDataFolder() + "/DATA/" + difficulty.getFileName().split("/")[0]);
+            File entities = new File(this.getDataFolder() + "/DATA/" + difficulty.getFileName().split("/")[1]);
+            if(!area.exists() || !entities.exists() ){
+                //Blocs
+                World world = RdManager.getWorld();
+                BuildManager.sampleRegion(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd(), difficulty);
+                for(Sample sample : difficulty.getSamples()){
+                    BuildManager.registerSamples(sample);
+                }
+                BuildManager.convertSamples(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd(), difficulty);
+                BuildManager.saveSamples(difficulty);
+                BuildManager.generateSamples(difficulty);
+
+                //Entities ( crystal )
+                BuildManager.registerEntities(world, difficulty);
+                BuildManager.saveEntities(difficulty);
+                BuildManager.generateEntities(world, difficulty);
+            }else{
+                //File loading
+                BuildManager.generateSamples(difficulty);
+                BuildManager.generateEntities(RdManager.getWorld(), difficulty);
+            }
+
         }
 
         System.out.println("Reusable Dragon successfully started ! have fun : )");

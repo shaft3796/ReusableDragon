@@ -61,7 +61,7 @@ public class DragonFight implements Runnable{
                 Bukkit.getScheduler().cancelTask(DragonCommand.getTaskid());
 
                 //regen arena
-                for(Sample sample : BuildManager.getSamples()){
+                for(Sample sample : Difficulty.getDifficulty().getSamples()){
                     BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
                 }
 

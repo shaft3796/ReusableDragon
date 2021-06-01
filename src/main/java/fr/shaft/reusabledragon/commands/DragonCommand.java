@@ -172,13 +172,13 @@ public class DragonCommand implements CommandExecutor {
             @Override
             public void run() {
 
-                if(currentEntity >= BuildManager.getEntities().size()){
+                if(currentEntity >= Difficulty.getDifficulty().getEntities().size()){
                     Bukkit.getScheduler().cancelTask(getTaskid2());
                     finish();
                 }
                 else{
 
-                    BuildManager.loadEntity(BuildManager.getEntities().get(getCurrentEntity()), RdManager.getWorld());
+                    BuildManager.loadEntity(Difficulty.getDifficulty().getEntities().get(getCurrentEntity()), RdManager.getWorld());
                     setCurrentEntity(getCurrentEntity()+1);
                 }
 
@@ -237,8 +237,8 @@ public class DragonCommand implements CommandExecutor {
         }
 
         //build arena
-        BuildManager.generateSamples();
-        for(Sample sample : BuildManager.getSamples()){
+        BuildManager.generateSamples(Difficulty.getDifficulty());
+        for(Sample sample : Difficulty.getDifficulty().getSamples()){
             BuildManager.loadSamples(sample, RdManager.getBattleArenaRoots());
         }
 

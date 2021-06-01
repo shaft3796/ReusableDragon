@@ -1,6 +1,7 @@
 package fr.shaft.reusabledragon.build;
 
 import fr.shaft.reusabledragon.RdManager;
+import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.save.SaveModule;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -13,38 +14,11 @@ import java.util.ArrayList;
 public class BuildManager {
 
     /*---------------
-        Elements
-    ---------------*/
-
-    //Sample
-    private static ArrayList<Sample> samples;
-    public static ArrayList<Sample> getSamples() {
-        return samples;
-    }
-
-    //Entity
-    private static ArrayList<RdEntity> entities;
-    public static ArrayList<RdEntity> getEntities() {
-        return entities;
-    }
-
-    //Task self canceling stuff
-    private static int played;
-    public static int getPlayed() {
-        return played;
-    }
-
-    private static int taskid;
-    public static int getTaskid() {
-        return taskid;
-    }
-
-    /*---------------
          Methods
     ---------------*/
 
     //Sampling
-    public static void sampleRegion(Location roots, Location end) {
+    public static void sampleRegion(Location roots, Location end, Difficulty difficulty) {
 
         //Ini
         int inirootX = roots.getBlockX();
@@ -71,14 +45,14 @@ public class BuildManager {
 
         World world = roots.getWorld();
 
-        samples = new ArrayList<>();
+        difficulty.setSamples(new ArrayList<>());
 
         //Loop
         for(int y = rootY; y<=rootY+sizeY; y++){
 
             Location loc = new Location(world, rootX, y, rootZ);
             Sample sample = new Sample(loc, sizeX, 1, sizeZ);
-            samples.add(sample);
+            difficulty.getSamples().add(sample);
 
         }
 
@@ -102,7 +76,7 @@ public class BuildManager {
 
     }
 
-    public static void convertSamples(Location roots, Location end){
+    public static void convertSamples(Location roots, Location end, Difficulty difficulty){
 
         //Ini
         int inirootX = roots.getBlockX();
@@ -119,7 +93,7 @@ public class BuildManager {
         int rootY = Math.min(inirootY, iniendY);
         int rootZ = Math.min(inirootZ, iniendZ);
 
-        for(Sample sample : samples){
+        for(Sample sample : difficulty.getSamples()){
 
             sample.getRoots().setX(sample.getRoots().getBlockX() - rootX);
             sample.getRoots().setY(sample.getRoots().getBlockY() - rootY);
@@ -151,12 +125,12 @@ public class BuildManager {
 
     }
 
-    public static void saveSamples(){
+    public static void saveSamples(Difficulty difficulty){
 
         SaveModule sv = new SaveModule(RdManager.getPlugin());
         sv.createDataFile("Area.rd");
         StringBuilder content = new StringBuilder();
-        for(Sample sample : BuildManager.getSamples()){
+        for(Sample sample : difficulty.getSamples()){
 
             for(Material mtr : sample.getBlocs()){
                 content.append(mtr.name()).append(";");
@@ -173,12 +147,12 @@ public class BuildManager {
         SaveModule.writeFile(sv.getDataFile(), content.toString());
     }
 
-    public static void generateSamples(){
+    public static void generateSamples(Difficulty difficulty){
 
         //Ini
         SaveModule sv = new SaveModule(RdManager.getPlugin());
         sv.createDataFile("Area.rd");
-        samples = new ArrayList<>();
+        difficulty.setSamples(new ArrayList<>());
 
         String content = SaveModule.readFile(sv.getDataFile());
 
@@ -197,21 +171,21 @@ public class BuildManager {
                 sample.addBlocs(Material.getMaterial(bloc));
             }
 
-            samples.add(sample);
+            difficulty.getSamples().add(sample);
         }
 
     }
 
     //Entities
-    public static void registerEntities(World world){
+    public static void registerEntities(World world, Difficulty difficulty){
 
-        entities = new ArrayList<>();
+        difficulty.setEntities(new ArrayList<>());
         for(Entity entity : world.getEntities()){
 
             if(entity.getType() == EntityType.ENDER_CRYSTAL){
 
                 RdEntity ent = new RdEntity(EntityType.ENDER_CRYSTAL, entity.getLocation());
-                entities.add(ent);
+                difficulty.getEntities().add(ent);
             }
         }
     }
@@ -246,12 +220,12 @@ public class BuildManager {
         world.spawnEntity(entity.getPos(), entity.getEntityType());
     }
 
-    public static void saveEntities(){
+    public static void saveEntities(Difficulty difficulty){
 
         SaveModule sv = new SaveModule(RdManager.getPlugin());
         sv.createDataFile("Entities.rd");
         StringBuilder content = new StringBuilder();
-        for(RdEntity entity : entities){
+        for(RdEntity entity : difficulty.getEntities()){
 
             content.append(entity.getEntityType().name()).append(";");
             content.append(entity.getPos().getX()).append(";");
@@ -263,12 +237,12 @@ public class BuildManager {
 
     }
 
-    public static void generateEntities(World world){
+    public static void generateEntities(World world, Difficulty difficulty){
 
         //Ini
         SaveModule sv = new SaveModule(RdManager.getPlugin());
         sv.createDataFile("Entities.rd");
-        entities = new ArrayList<>();
+        difficulty.setEntities(new ArrayList<>());
 
         String content = SaveModule.readFile(sv.getDataFile());
 
@@ -283,7 +257,7 @@ public class BuildManager {
             //PostCond
             if(!data[0].equals("") && !data[1].equals("") && !data[2].equals("") && !data[3].equals("") ){
                 RdEntity ent = new RdEntity(EntityType.valueOf(data[0]), new Location(world, Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3])));
-                entities.add(ent);
+                difficulty.getEntities().add(ent);
             }
 
         }
