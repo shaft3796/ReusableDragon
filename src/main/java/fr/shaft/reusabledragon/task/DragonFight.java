@@ -75,6 +75,9 @@ public class DragonFight implements Runnable{
 
                         player.sendMessage(ChatColor.GOLD + Lang.get("youKilledDragon"));
                         players.add(pl);
+
+                        //XP DISTRIBUTION
+                        pl.giveExp(Difficulty.getDifficulty().getExp());
                     }
 
                 }

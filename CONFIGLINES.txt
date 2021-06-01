@@ -1,0 +1,11 @@
+Hey, in this file you will be able to see the evolution of the configuration file. When you don't have a config file created the plugin will create
+this file. But when you download a new version of the plugin if there is new config lines, your file will not be updated. Everytime when you update the plugin,
+check this file to see the lines to add to your existing config file ! Of course you can delete your file and the plugin will generate a new file with the new config lines of the updates !
+
+- [-] Removed lines
+- [+] Added a lines
+- [~] modified a lines
+
+V2.0.4
+
+Creation of this file

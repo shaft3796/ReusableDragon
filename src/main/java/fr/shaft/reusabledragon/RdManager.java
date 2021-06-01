@@ -5,6 +5,7 @@ import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
 import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.listeners.OnDamage;
+import fr.shaft.reusabledragon.listeners.OnEntityDeath;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
 import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.*;
@@ -175,6 +176,7 @@ public class RdManager {
         //Player Build ( place / break ) Event
         plugin.getServer().getPluginManager().registerEvents(new OnPlayerBuild(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OnDamage(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new OnEntityDeath(), plugin);
     }
 
     //register required materials
@@ -370,6 +372,7 @@ public class RdManager {
 
         Difficulty.EASY.setLife(life);
         Difficulty.EASY.setDamage(damage);
+        Difficulty.EASY.setExp(config.getInt("exp.easy"));
 
         //MEDIUM
         words = config.getString("difficulties.medium").split("; ");
@@ -385,6 +388,7 @@ public class RdManager {
 
         Difficulty.MEDIUM.setLife(life);
         Difficulty.MEDIUM.setDamage(damage);
+        Difficulty.MEDIUM.setExp(config.getInt("exp.medium"));
 
 
         //hard
@@ -401,6 +405,7 @@ public class RdManager {
 
         Difficulty.HARD.setLife(life);
         Difficulty.HARD.setDamage(damage);
+        Difficulty.HARD.setExp(config.getInt("exp.hard"));
 
 
 

@@ -5,9 +5,9 @@ import org.bukkit.boss.BarColor;
 
 public enum Difficulty {
 
-    EASY (200.0, 15.0, "Easy Dragon", BarColor.PINK, ChatColor.LIGHT_PURPLE, "easy"),
-    MEDIUM (400.0, 20.0, "Medium Dragon", BarColor.PURPLE, ChatColor.DARK_PURPLE, "medium"),
-    HARD (800.0, 30.0, "Hard Dragon", BarColor.RED, ChatColor.DARK_RED, "hard");
+    EASY (200.0, 15.0, "Easy Dragon", BarColor.PINK, ChatColor.LIGHT_PURPLE, "easy", 500),
+    MEDIUM (400.0, 20.0, "Medium Dragon", BarColor.PURPLE, ChatColor.DARK_PURPLE, "medium", 750),
+    HARD (800.0, 30.0, "Hard Dragon", BarColor.RED, ChatColor.DARK_RED, "hard", 1000);
 
     private double life;
     private double damage;
@@ -15,6 +15,7 @@ public enum Difficulty {
     private final BarColor barColor;
     private final ChatColor nameColor;
     private final String stringValue;
+    private int exp;
 
     public double getLife() {
         return life;
@@ -36,6 +37,12 @@ public enum Difficulty {
         return name;
     }
     public String getStringValue() { return stringValue; }
+    public int getExp() {
+        return exp;
+    }
+    public void setExp(int exp){
+        this.exp = exp;
+    }
 
     private static Difficulty difficulty = Difficulty.EASY;
     public static Difficulty getDifficulty() {
@@ -47,7 +54,7 @@ public enum Difficulty {
     }
 
 
-    Difficulty(Double life, Double damage, String name, BarColor barColor, ChatColor chatColor, String stringValue){
+    Difficulty(Double life, Double damage, String name, BarColor barColor, ChatColor chatColor, String stringValue, int exp){
 
         this.life = life;
         this.barColor = barColor;
@@ -55,6 +62,7 @@ public enum Difficulty {
         this.nameColor = chatColor;
         this.damage = damage;
         this.stringValue = stringValue;
+        this.exp = exp;
 
 
     }

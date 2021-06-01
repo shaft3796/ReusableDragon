@@ -14,18 +14,25 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        //Updater
-        Logger logger = this.getLogger();
+        //Server alert
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println(" Reusable Dragon is starting now ! ");
+        System.out.println(" ");
+
         new UpdateChecker(this, 92504).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("There is no update available.");
+                System.out.println("There is no update available.");
             } else {
-                logger.info("There is a new update available.");
+                System.out.println("There is a new update available.");
             }
         });
 
-        //Server alert
-        System.out.println("Reusable dragon starting . .");
+        System.out.println(" ");
+
+        System.out.println("If you just updated the plugin to a new version don't forget to look");
+        System.out.println("at the CONFIGLINES file located in github, find the link in the Reusable Dragon spigot page");
+        System.out.println(" ");
+
 
         //Manager Ini
         new RdManager(this);
@@ -56,6 +63,9 @@ public class Main extends JavaPlugin {
             BuildManager.generateSamples();
             BuildManager.generateEntities(RdManager.getWorld());
         }
+
+        System.out.println("Reusable Dragon successfully started ! have fun : )");
+        System.out.println("--------------------------------------------------------------------");
 
     }
 

@@ -52,3 +52,8 @@ Big update
 ## V2.0.4
 
 [*] Fixed a bug which made impossible the plugin to launch itself
+
+## V2.1.0
+
+[+] Added fairly xp distribution system ( configurable in config file, don't forget to look at CONFIGLINES file )
+[^] upgraded starting message
