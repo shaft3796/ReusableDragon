@@ -8,6 +8,7 @@ import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.listeners.OnDamage;
 import fr.shaft.reusabledragon.listeners.OnEntityDeath;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
+import fr.shaft.reusabledragon.task.ChestSpawn;
 import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,7 +19,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class RdManager {
 
@@ -103,6 +103,9 @@ public class RdManager {
     public static String getLang() {
         return lang;
     }
+
+    //Spawn method
+    private static int spawnMethod;
 
     /*---------------
          Methods
@@ -358,12 +361,31 @@ public class RdManager {
             battleArenaEnd = new Location(world, endX, endY, endZ);
         }
 
+        //Spawn Method
+        {
+            String[] line = plugin.getConfig().getString("spawnmethod").split(";");
+            spawnMethod = Integer.parseInt(line[0]);
+            if(spawnMethod != 1 && spawnMethod != 2){
+                spawnMethod = 1;
+            }
+            if(spawnMethod == 2){
+
+                Location location = new Location(world, Integer.parseInt(line[1]), Integer.parseInt(line[2]), Integer.parseInt(line[3]));
+                location.getBlock().setType(Material.CHEST);
+
+                Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new ChestSpawn(location), 0L, 30L);
+
+            }
+        }
+
     }
 
     //Commands
     private static void registerCommands() {
 
-        plugin.getCommand("dragon").setExecutor(new DragonCommand());
+        if(spawnMethod == 1){
+            plugin.getCommand("dragon").setExecutor(new DragonCommand());
+        }
         plugin.getCommand("rdsave").setExecutor(new SaveAreaCommand());
 
     }

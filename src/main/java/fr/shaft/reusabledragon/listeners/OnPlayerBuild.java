@@ -36,7 +36,9 @@ public class OnPlayerBuild implements Listener {
             if(RdManager.inArea(roots2, end2, event.getBlock().getLocation())){
 
                 if(RdManager.getFightStatue()){
-                    return;
+                    if(event.getBlock().getType() == Material.CHEST){
+                        event.setCancelled(true);
+                    }
                 }else{
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(ChatColor.RED + Lang.get("breakInBossArea"));
@@ -92,11 +94,6 @@ public class OnPlayerBuild implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-
-        //INI
-        World world = RdManager.getWorld();
-        Location roots = new Location(world, -10, 0, -10);
-        Location end = new Location(world, 10, 200, 10);
 
         if (event.getMaterial() == Material.END_CRYSTAL && event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isOp() && event.getPlayer().getWorld() == RdManager.getWorld()) {
 

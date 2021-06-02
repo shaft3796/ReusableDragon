@@ -63,3 +63,6 @@ Big update
 [~] modified updater message
 [+] Added multiple arena per boss difficulties ! /!\ You will have to save a new time your battles arenas, see step 2 of README file. /!\
 
+## V2.3.0
+
+[+] Added a new way to spawn the dragon with items placed in a chest !

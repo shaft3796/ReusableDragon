@@ -3,13 +3,11 @@ package fr.shaft.reusabledragon.commands;
 import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
 import fr.shaft.reusabledragon.build.BuildManager;
-import fr.shaft.reusabledragon.build.RdEntity;
 import fr.shaft.reusabledragon.build.Sample;
 import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.boss.BarColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,12 +15,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zoglin;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +28,9 @@ public class DragonCommand implements CommandExecutor {
     private static int taskid;
     public static int getTaskid() {
         return taskid;
+    }
+    public static void setTaskid(int taskid) {
+        DragonCommand.taskid = taskid;
     }
 
     private static int taskid2;
@@ -98,39 +97,38 @@ public class DragonCommand implements CommandExecutor {
         Map<Material, Integer> checkedMaterials = new HashMap<>();
         for(Map.Entry<Material, Integer> entry : materials.entrySet()){
 
-            int quantity = entry.getValue();
-            Material material = entry.getKey();
+                int quantity = entry.getValue();
+                Material material = entry.getKey();
 
-            for(ItemStack item : inventory){
+                for(ItemStack item : inventory){
 
-                if(quantity <= 0){break;}
+                    if(quantity <= 0){break;}
 
-                if(item != null){
+                    if(item != null){
 
-                    if(item.getType() == material){
+                        if(item.getType() == material){
 
-                        quantity -= item.getAmount();
+                            quantity -= item.getAmount();
+                        }
+
                     }
-
                 }
-            }
 
-            checkedMaterials.put(material, quantity);
-        }
+                checkedMaterials.put(material, quantity);
+            }
         for(Map.Entry<Material, Integer> entry : checkedMaterials.entrySet()){
 
-            if (entry.getValue() > 0) {
+                if (entry.getValue() > 0) {
 
-                spawnable = false;
-                break;
+                    spawnable = false;
+                    break;
+                }
             }
-        }
         if(!spawnable){
-            player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
-            DISABLE = false;
-            return false;
-        }
-        return true;
+                player.sendMessage(ChatColor.RED + Lang.get("missingMaterials"));
+                DISABLE = false;
+                return false;
+            }return true;
 
     }
     private static void inventoryHandler(){
@@ -268,7 +266,8 @@ public class DragonCommand implements CommandExecutor {
         dragon.setPhase(EnderDragon.Phase.CIRCLING);
         dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(life);
         dragon.setHealth(life);
-        dragon.getDragonBattle().getEndPortalLocation().setX(50);
+        dragon.setCustomName(Difficulty.getDifficulty().getNameColor() + Difficulty.getDifficulty().getName());
+        dragon.setCustomNameVisible(true);
 
         //Starting fight and bar actualisation task
         RdManager.createBar(name, color);

@@ -79,6 +79,12 @@ exp:
   medium: 750
   hard: 1000
 
+#Spawn method, the method to spawn the dragon
+# "1" : /dragon command will check in your inventory if you have required materials to spawn the dragon
+# "2;X;Y;Z" : /dragon command will be disable and to spawn dragon player will have to put the required item in the chest of the given location, You don't have to place the chest, the plugin will place it
+spawnmethod: "2;0;66;0"
+
+
 #select your languages ! you can create your own translations
 
 language: "en"
