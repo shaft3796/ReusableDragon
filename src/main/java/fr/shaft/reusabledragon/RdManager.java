@@ -1,23 +1,24 @@
 package fr.shaft.reusabledragon;
 
 import fr.shaft.reusabledragon.build.BuildManager;
+import fr.shaft.reusabledragon.build.Sample;
 import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
 import fr.shaft.reusabledragon.enumerations.Difficulty;
 import fr.shaft.reusabledragon.listeners.OnDamage;
 import fr.shaft.reusabledragon.listeners.OnEntityDeath;
 import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
-import fr.shaft.reusabledragon.task.DragonFight;
 import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 public class RdManager {
 
@@ -27,46 +28,39 @@ public class RdManager {
 
     //plugin
     private static JavaPlugin plugin;
-
     public static JavaPlugin getPlugin() {
         return plugin;
     }
 
     //required materials
     private static final Map<Difficulty, Map<Material, Integer>> requiredMaterials = new HashMap<>();
-
     public static Map<Difficulty, Map<Material, Integer>> getRequiredMaterials() {
         return requiredMaterials;
     }
 
     //rewards
     private static final Map<Difficulty, ArrayList<String[]>> rewards = new HashMap<>();
-
     public static Map<Difficulty, ArrayList<String[]>> getRewards() {
         return rewards;
     }
 
     //End
     private static World world;
-
     public static World getWorld() {
         return world;
     }
 
     //boss bar
     private static BossBar bar;
-
     public static BossBar getBar() {
         return bar;
     }
 
     //Fight Statue
     private static boolean fightStatue;
-
     public static boolean getFightStatue() {
         return fightStatue;
     }
-
     public static boolean actualiseFightStatue() {
 
         boolean check = false;
@@ -86,63 +80,61 @@ public class RdManager {
 
     //End protection
     private static Location noBuildLandRoots;
-
     public static Location getNoBuildLandRoots() {
         return noBuildLandRoots;
     }
-
     private static Location noBuildLandEnd;
-
     public static Location getNoBuildLandEnd() {
         return noBuildLandEnd;
     }
 
     //Battle Arena
     private static Location battleArenaRoots;
-
     public static Location getBattleArenaRoots() {
         return battleArenaRoots;
     }
-
     private static Location battleArenaEnd;
-
     public static Location getBattleArenaEnd() {
         return battleArenaEnd;
     }
 
     //Lang
     private static String lang;
-
     public static String getLang() {
         return lang;
     }
 
     /*---------------
-          Build
-    ---------------*/
+         Methods
+     ---------------*/
 
-    public RdManager(JavaPlugin pl) {
+    //Core
+    public static void setUp(JavaPlugin pl){
 
         //Ini
         plugin = pl;
+        //config
+        pl.saveDefaultConfig();
 
-        //Dragon attributes
-        registerDragonAttributes();
+        //Server alert
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println(" Reusable Dragon is starting now !! ");
+        System.out.println(" ");
+        UpdateChecker updater = new UpdateChecker(pl, 92504);
+        if (updater.checkForUpdates()) {
+            System.out.println("There is a new update available !");
+        }
+        else{
+            System.out.println("You have the latest version of the plugin !");
+        }
+        System.out.println(" ");
+        System.out.println("If you just updated the plugin to a new version don't forget to look");
+        System.out.println("at the CONFIGLINES file and PATCHNOTES file located in github, find the link in the Reusable Dragon spigot page");
+        System.out.println(" ");
 
-        //Lang registration
-        langRegistration();
 
-        //materials
-        registerMaterials();
-
-        //rewards
-        rewardsRegistration();
-
-        //Data registration
-        worldRegistration();
-
-        //Locations registration
-        locationsRegistration();
+        //Load data from config file
+        loadConfig();
 
         //Listeners
         registerListeners();
@@ -156,17 +148,223 @@ public class RdManager {
         //Dragon checking
         dragonChecking();
 
+        //Save Area if there is no files
+        saveArea();
+
+        //Server alert
+        System.out.println("Reusable Dragon successfully started ! have fun : )");
+        System.out.println("--------------------------------------------------------------------");
+
     }
 
-    /*---------------
-         Methods
-     ---------------*/
+    //Save Area
+    private static void saveArea(){
+
+        //Save area if there is no file, to prevent error
+        for(Difficulty difficulty : Difficulty.values()){
+
+            File area = new File(plugin.getDataFolder() + "/DATA/" + difficulty.getFileName().split("/")[0]);
+            File entities = new File(plugin.getDataFolder() + "/DATA/" + difficulty.getFileName().split("/")[1]);
+            if(!area.exists() || !entities.exists() ){
+                //Blocs
+                World world = RdManager.getWorld();
+                BuildManager.sampleRegion(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd(), difficulty);
+                for(Sample sample : difficulty.getSamples()){
+                    BuildManager.registerSamples(sample);
+                }
+                BuildManager.convertSamples(RdManager.getBattleArenaRoots(), RdManager.getBattleArenaEnd(), difficulty);
+                BuildManager.saveSamples(difficulty);
+                BuildManager.generateSamples(difficulty);
+
+                //Entities ( crystal )
+                BuildManager.registerEntities(world, difficulty);
+                BuildManager.saveEntities(difficulty);
+                BuildManager.generateEntities(world, difficulty);
+            }else{
+                //File loading
+                BuildManager.generateSamples(difficulty);
+                BuildManager.generateEntities(RdManager.getWorld(), difficulty);
+            }
+
+        }
+
+    }
+
+    //Load config
+    private static void loadConfig(){
+
+        //Dragon Attributes
+        {
+            FileConfiguration config = plugin.getConfig();
+
+            //EASY
+            String[] words = config.getString("difficulties.easy").split("; ");
+
+            double life = Double.parseDouble(words[0]);
+            if (life < 1.0) {
+                life = 1.0;
+            }
+            double damage = Double.parseDouble(words[1]);
+            if (damage < 1.0) {
+                damage = 1.0;
+            }
+
+            Difficulty.EASY.setLife(life);
+            Difficulty.EASY.setDamage(damage);
+            Difficulty.EASY.setExp(config.getInt("exp.easy"));
+
+            //MEDIUM
+            words = config.getString("difficulties.medium").split("; ");
+
+            life = Double.parseDouble(words[0]);
+            if (life < 1.0) {
+                life = 1.0;
+            }
+            damage = Double.parseDouble(words[1]);
+            if (damage < 1.0) {
+                damage = 1.0;
+            }
+
+            Difficulty.MEDIUM.setLife(life);
+            Difficulty.MEDIUM.setDamage(damage);
+            Difficulty.MEDIUM.setExp(config.getInt("exp.medium"));
+
+
+            //hard
+            words = config.getString("difficulties.hard").split("; ");
+
+            life = Double.parseDouble(words[0]);
+            if (life < 1.0) {
+                life = 1.0;
+            }
+            damage = Double.parseDouble(words[1]);
+            if (damage < 1.0) {
+                damage = 1.0;
+            }
+
+            Difficulty.HARD.setLife(life);
+            Difficulty.HARD.setDamage(damage);
+            Difficulty.HARD.setExp(config.getInt("exp.hard"));
+        }
+
+        //Lang
+        lang = plugin.getConfig().getString("language");
+
+        //required materials
+        {
+            FileConfiguration config = plugin.getConfig();
+
+            for (Difficulty difficulty : Difficulty.values()) {
+
+                Map<Material, Integer> materials = new HashMap<>();
+                for (String string : config.getStringList("required." + difficulty.getStringValue())) {
+
+                    String[] words = string.split(" ");
+                    Material material = Material.getMaterial(words[0]);
+                    if (material != null) {
+
+                        int quantity = Integer.parseInt(words[1]);
+                        if (quantity > 0) {
+
+                            materials.put(material, quantity);
+
+                        }
+
+                    }
+
+                }
+
+                requiredMaterials.put(difficulty, materials);
+            }
+        }
+
+        //rewards
+        {
+            FileConfiguration config = plugin.getConfig();
+
+            for (Difficulty difficulty : Difficulty.values()) {
+
+                ArrayList<String[]> reward = new ArrayList<>();
+
+                for (String string : config.getStringList("rewards." + difficulty.getStringValue())) {
+
+                    String[] words = string.split("; ");
+
+                    reward.add(words);
+                }
+
+                rewards.put(difficulty, reward);
+            }
+        }
+
+        //world
+        world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
+
+        //Locations
+        {
+            //NO BUILD LAND ROOTS & END
+            String str = plugin.getConfig().getString("endProtectionRoots");
+            String[] splited = str.split(" ");
+
+            int inirootX = Integer.parseInt(splited[0]);
+            int inirootY = Integer.parseInt(splited[1]);
+            int inirootZ = Integer.parseInt(splited[2]);
+
+            str = plugin.getConfig().getString("endProtectionEnd");
+            splited = str.split(" ");
+
+            int iniendX = Integer.parseInt(splited[0]);
+            int iniendY = Integer.parseInt(splited[1]);
+            int iniendZ = Integer.parseInt(splited[2]);
+
+            //Conversion
+            int rootX = Math.min(inirootX, iniendX);
+            int rootY = Math.min(inirootY, iniendY);
+            int rootZ = Math.min(inirootZ, iniendZ);
+
+            int endX = Math.max(inirootX, iniendX);
+            int endY = Math.max(inirootY, iniendY);
+            int endZ = Math.max(inirootZ, iniendZ);
+
+            noBuildLandRoots = new Location(world, rootX, rootY, rootZ);
+            noBuildLandEnd = new Location(world, endX, endY, endZ);
+
+            //BATTLE ARENA ROOTS & END
+            str = plugin.getConfig().getString("battleArenaRoots");
+            splited = str.split(" ");
+
+            inirootX = Integer.parseInt(splited[0]);
+            inirootY = Integer.parseInt(splited[1]);
+            inirootZ = Integer.parseInt(splited[2]);
+
+            str = plugin.getConfig().getString("battleArenaEnd");
+            splited = str.split(" ");
+
+            iniendX = Integer.parseInt(splited[0]);
+            iniendY = Integer.parseInt(splited[1]);
+            iniendZ = Integer.parseInt(splited[2]);
+
+            //Conversion
+            rootX = Math.min(inirootX, iniendX);
+            rootY = Math.min(inirootY, iniendY);
+            rootZ = Math.min(inirootZ, iniendZ);
+
+            endX = Math.max(inirootX, iniendX);
+            endY = Math.max(inirootY, iniendY);
+            endZ = Math.max(inirootZ, iniendZ);
+
+            //Converted values
+            battleArenaRoots = new Location(world, rootX, rootY, rootZ);
+            battleArenaEnd = new Location(world, endX, endY, endZ);
+        }
+
+    }
 
     //Commands
     private static void registerCommands() {
 
         plugin.getCommand("dragon").setExecutor(new DragonCommand());
-        plugin.getCommand("rdsave").setExecutor((new SaveAreaCommand()));
+        plugin.getCommand("rdsave").setExecutor(new SaveAreaCommand());
 
     }
 
@@ -177,130 +375,6 @@ public class RdManager {
         plugin.getServer().getPluginManager().registerEvents(new OnPlayerBuild(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OnDamage(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OnEntityDeath(), plugin);
-    }
-
-    //register required materials
-    private static void registerMaterials() {
-
-        FileConfiguration config = plugin.getConfig();
-
-        for (Difficulty difficulty : Difficulty.values()) {
-
-            Map<Material, Integer> materials = new HashMap<>();
-            for (String string : config.getStringList("required." + difficulty.getStringValue())) {
-
-                String[] words = string.split(" ");
-                Material material = Material.getMaterial(words[0]);
-                if (material != null) {
-
-                    int quantity = Integer.parseInt(words[1]);
-                    if (quantity > 0) {
-
-                        materials.put(material, quantity);
-
-                    }
-
-                }
-
-            }
-
-            requiredMaterials.put(difficulty, materials);
-        }
-
-    }
-
-    //world registration
-    private static void worldRegistration() {
-        world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
-    }
-
-    //reward registration
-    private static void rewardsRegistration() {
-
-        //Ini
-        FileConfiguration config = plugin.getConfig();
-
-        for (Difficulty difficulty : Difficulty.values()) {
-
-            ArrayList<String[]> reward = new ArrayList<>();
-
-            for (String string : config.getStringList("rewards." + difficulty.getStringValue())) {
-
-                String[] words = string.split("; ");
-
-                reward.add(words);
-            }
-
-            rewards.put(difficulty, reward);
-        }
-
-    }
-
-    //locations registration
-    private static void locationsRegistration() {
-
-        //NO BUILD LAND ROOTS & END
-        String str = plugin.getConfig().getString("endProtectionRoots");
-        String[] splited = str.split(" ");
-
-        int inirootX = Integer.parseInt(splited[0]);
-        int inirootY = Integer.parseInt(splited[1]);
-        int inirootZ = Integer.parseInt(splited[2]);
-
-        str = plugin.getConfig().getString("endProtectionEnd");
-        splited = str.split(" ");
-
-        int iniendX = Integer.parseInt(splited[0]);
-        int iniendY = Integer.parseInt(splited[1]);
-        int iniendZ = Integer.parseInt(splited[2]);
-
-        //Conversion
-        int rootX = Math.min(inirootX, iniendX);
-        int rootY = Math.min(inirootY, iniendY);
-        int rootZ = Math.min(inirootZ, iniendZ);
-
-        int endX = Math.max(inirootX, iniendX);
-        int endY = Math.max(inirootY, iniendY);
-        int endZ = Math.max(inirootZ, iniendZ);
-
-        noBuildLandRoots = new Location(world, rootX, rootY, rootZ);
-        noBuildLandEnd = new Location(world, endX, endY, endZ);
-
-        //BATTLE ARENA ROOTS & END
-        str = plugin.getConfig().getString("battleArenaRoots");
-        splited = str.split(" ");
-
-        inirootX = Integer.parseInt(splited[0]);
-        inirootY = Integer.parseInt(splited[1]);
-        inirootZ = Integer.parseInt(splited[2]);
-
-        str = plugin.getConfig().getString("battleArenaEnd");
-        splited = str.split(" ");
-
-        iniendX = Integer.parseInt(splited[0]);
-        iniendY = Integer.parseInt(splited[1]);
-        iniendZ = Integer.parseInt(splited[2]);
-
-        //Conversion
-        rootX = Math.min(inirootX, iniendX);
-        rootY = Math.min(inirootY, iniendY);
-        rootZ = Math.min(inirootZ, iniendZ);
-
-        endX = Math.max(inirootX, iniendX);
-        endY = Math.max(inirootY, iniendY);
-        endZ = Math.max(inirootZ, iniendZ);
-
-        //Converted values
-        battleArenaRoots = new Location(world, rootX, rootY, rootZ);
-        battleArenaEnd = new Location(world, endX, endY, endZ);
-
-    }
-
-    //Lang registration
-    private static void langRegistration() {
-
-        lang = plugin.getConfig().getString("language");
-
     }
 
     //Player in area
@@ -349,65 +423,6 @@ public class RdManager {
     public static void createBar(String name, BarColor barColor) {
 
         bar = Bukkit.createBossBar(name, barColor, BarStyle.SOLID, BarFlag.CREATE_FOG, BarFlag.DARKEN_SKY, BarFlag.PLAY_BOSS_MUSIC);
-
-    }
-
-    //Dragon Attributes
-    private static void registerDragonAttributes() {
-
-        //Ini
-        FileConfiguration config = plugin.getConfig();
-
-        //EASY
-        String[] words = config.getString("difficulties.easy").split("; ");
-
-        double life = Double.parseDouble(words[0]);
-        if (life < 1.0) {
-            life = 1.0;
-        }
-        double damage = Double.parseDouble(words[1]);
-        if (damage < 1.0) {
-            damage = 1.0;
-        }
-
-        Difficulty.EASY.setLife(life);
-        Difficulty.EASY.setDamage(damage);
-        Difficulty.EASY.setExp(config.getInt("exp.easy"));
-
-        //MEDIUM
-        words = config.getString("difficulties.medium").split("; ");
-
-        life = Double.parseDouble(words[0]);
-        if (life < 1.0) {
-            life = 1.0;
-        }
-        damage = Double.parseDouble(words[1]);
-        if (damage < 1.0) {
-            damage = 1.0;
-        }
-
-        Difficulty.MEDIUM.setLife(life);
-        Difficulty.MEDIUM.setDamage(damage);
-        Difficulty.MEDIUM.setExp(config.getInt("exp.medium"));
-
-
-        //hard
-        words = config.getString("difficulties.hard").split("; ");
-
-        life = Double.parseDouble(words[0]);
-        if (life < 1.0) {
-            life = 1.0;
-        }
-        damage = Double.parseDouble(words[1]);
-        if (damage < 1.0) {
-            damage = 1.0;
-        }
-
-        Difficulty.HARD.setLife(life);
-        Difficulty.HARD.setDamage(damage);
-        Difficulty.HARD.setExp(config.getInt("exp.hard"));
-
-
 
     }
 
