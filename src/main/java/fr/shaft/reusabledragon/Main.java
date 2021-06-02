@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
 
         //Server alert
         System.out.println("--------------------------------------------------------------------");
-        System.out.println(" Reusable Dragon is starting now ! ");
+        System.out.println(" Reusable Dragon is starting now !! ");
         System.out.println(" ");
 
         new UpdateChecker(this, 92504).getVersion(version -> {
@@ -29,7 +29,6 @@ public class Main extends JavaPlugin {
         });
 
         System.out.println(" ");
-
         System.out.println("If you just updated the plugin to a new version don't forget to look");
         System.out.println("at the CONFIGLINES file located in github, find the link in the Reusable Dragon spigot page");
         System.out.println(" ");
@@ -42,7 +41,6 @@ public class Main extends JavaPlugin {
         this.saveDefaultConfig();
 
         //Save area if there is no file, to prevent error
-
         for(Difficulty difficulty : Difficulty.values()){
 
             File area = new File(this.getDataFolder() + "/DATA/" + difficulty.getFileName().split("/")[0]);

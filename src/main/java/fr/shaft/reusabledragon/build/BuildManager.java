@@ -128,7 +128,7 @@ public class BuildManager {
     public static void saveSamples(Difficulty difficulty){
 
         SaveModule sv = new SaveModule(RdManager.getPlugin());
-        sv.createDataFile("Area.rd");
+        sv.createDataFile(difficulty.getFileName().split("/")[0]);
         StringBuilder content = new StringBuilder();
         for(Sample sample : difficulty.getSamples()){
 
@@ -151,7 +151,7 @@ public class BuildManager {
 
         //Ini
         SaveModule sv = new SaveModule(RdManager.getPlugin());
-        sv.createDataFile("Area.rd");
+        sv.createDataFile(difficulty.getFileName().split("/")[0]);
         difficulty.setSamples(new ArrayList<>());
 
         String content = SaveModule.readFile(sv.getDataFile());
@@ -223,7 +223,7 @@ public class BuildManager {
     public static void saveEntities(Difficulty difficulty){
 
         SaveModule sv = new SaveModule(RdManager.getPlugin());
-        sv.createDataFile("Entities.rd");
+        sv.createDataFile(difficulty.getFileName().split("/")[1]);
         StringBuilder content = new StringBuilder();
         for(RdEntity entity : difficulty.getEntities()){
 
@@ -241,7 +241,7 @@ public class BuildManager {
 
         //Ini
         SaveModule sv = new SaveModule(RdManager.getPlugin());
-        sv.createDataFile("Entities.rd");
+        sv.createDataFile(difficulty.getFileName().split("/")[1]);
         difficulty.setEntities(new ArrayList<>());
 
         String content = SaveModule.readFile(sv.getDataFile());
