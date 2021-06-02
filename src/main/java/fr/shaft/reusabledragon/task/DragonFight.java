@@ -2,6 +2,7 @@ package fr.shaft.reusabledragon.task;
 
 import fr.shaft.reusabledragon.Lang;
 import fr.shaft.reusabledragon.RdManager;
+import fr.shaft.reusabledragon.StatsManager;
 import fr.shaft.reusabledragon.build.BuildManager;
 import fr.shaft.reusabledragon.build.Sample;
 import fr.shaft.reusabledragon.commands.DragonCommand;
@@ -78,6 +79,9 @@ public class DragonFight implements Runnable{
 
                         //XP DISTRIBUTION
                         pl.giveExp(Difficulty.getDifficulty().getExp());
+
+                        //STATS UPDATING
+                        StatsManager.updateStats(pl.getName(), -1, 1, -1, -1, -1);
                     }
 
                 }

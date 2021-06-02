@@ -18,6 +18,9 @@ public class Main extends JavaPlugin {
         //Server alert
         System.out.println("Reusable dragon shutting down . .");
 
+        //Save stats
+        StatsManager.saveStats();
+
     }
 
 }

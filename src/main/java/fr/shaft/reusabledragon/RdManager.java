@@ -5,9 +5,7 @@ import fr.shaft.reusabledragon.build.Sample;
 import fr.shaft.reusabledragon.commands.DragonCommand;
 import fr.shaft.reusabledragon.commands.SaveAreaCommand;
 import fr.shaft.reusabledragon.enumerations.Difficulty;
-import fr.shaft.reusabledragon.listeners.OnDamage;
-import fr.shaft.reusabledragon.listeners.OnEntityDeath;
-import fr.shaft.reusabledragon.listeners.OnPlayerBuild;
+import fr.shaft.reusabledragon.listeners.*;
 import fr.shaft.reusabledragon.task.ChestSpawn;
 import org.bukkit.*;
 import org.bukkit.boss.*;
@@ -116,6 +114,7 @@ public class RdManager {
 
         //Ini
         plugin = pl;
+
         //config
         pl.saveDefaultConfig();
 
@@ -153,6 +152,9 @@ public class RdManager {
 
         //Save Area if there is no files
         saveArea();
+
+        //Load stats
+        StatsManager.loadStats();
 
         //Server alert
         System.out.println("Reusable Dragon successfully started ! have fun : )");
@@ -393,10 +395,12 @@ public class RdManager {
     //Listeners
     private static void registerListeners() {
 
-        //Player Build ( place / break ) Event
+
         plugin.getServer().getPluginManager().registerEvents(new OnPlayerBuild(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OnDamage(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OnEntityDeath(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new OnEntityDamagedByEntity(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new OnPlayerDie(), plugin);
     }
 
     //Player in area
