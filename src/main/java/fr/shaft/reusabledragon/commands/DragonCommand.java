@@ -90,6 +90,7 @@ public class DragonCommand implements CommandExecutor {
         if(RdManager.getFightStatue()){
 
             player.sendMessage(ChatColor.RED + Lang.get("dragonStillAlive"));
+            DISABLE = false;
             return false;
         }
 
@@ -267,6 +268,7 @@ public class DragonCommand implements CommandExecutor {
         dragon.setPhase(EnderDragon.Phase.CIRCLING);
         dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(life);
         dragon.setHealth(life);
+        dragon.getDragonBattle().getEndPortalLocation().setX(50);
 
         //Starting fight and bar actualisation task
         RdManager.createBar(name, color);
