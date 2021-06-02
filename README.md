@@ -23,10 +23,22 @@ The plugin when started for the first time will create an configuration file, ch
 
 #### Step 2 - save your battle arena :
 
-When started for the first time with a good world name in configuration file the plugin will generate 2 files : Entities.rd & Area.rd, it's your battle arena data.
-Setup your battle arena ( -50 50 -50 to 50 110 50 with default config ) as you want.
-use /rdsave to save the arena ! just blocks and Ender Crystals will be saved.
-This arena will be generated and Ender Crystals will spawn before every battle !
+When started for the first time, the plugin will create 6 files :
+
+RdAreaEasy.rd
+RdEntitiesEasy.rd
+RdAreaMedium.rd
+RdEntitiesMedium.rd
+RdAreaHard.rd
+RdEntitiesHard.rd
+
+It's your battles areas data. By default, all difficulties will have the same area. Let's now save our areas.
+
+Build your area how you want from and make sure to have ender crystal placed ! Use /rdsave easy to save your easy battle area.
+
+Build new area or keep the same and save the areas for other difficulties with /rdsave medium and /rdsave hard
+
+Now all your areas are saved for each difficulty
 
 #### Step 3 - customise your config file :
 

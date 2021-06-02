@@ -20,3 +20,7 @@ exp:
   easy: 500
   medium: 750
   hard: 1000
+
+V2.2.0
+
+No new config lines

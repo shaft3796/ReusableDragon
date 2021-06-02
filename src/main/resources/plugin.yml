@@ -1,5 +1,5 @@
 name: ReusableDragon
-version: 2.1.0
+version: 2.2.0
 main: fr.shaft.reusabledragon.Main
 commands:
   dragon:
@@ -9,4 +9,4 @@ commands:
   rdsave:
     description: "Save to persistent data the dragon area"
     permission: rdsave.use
-    usage: "Usage: /rdsave"
+    usage: "Usage: /rdsave <difficulty>"

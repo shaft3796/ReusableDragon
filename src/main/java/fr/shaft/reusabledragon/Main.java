@@ -20,13 +20,11 @@ public class Main extends JavaPlugin {
         System.out.println(" Reusable Dragon is starting now !! ");
         System.out.println(" ");
 
-        new UpdateChecker(this, 92504).getVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                System.out.println("There is no update available.");
-            } else {
-                System.out.println("There is a new update available.");
-            }
-        });
+        UpdateChecker updater = new UpdateChecker(this, 92504);
+        if (updater.checkForUpdates()) {
+            System.out.println("There is a new update available !");
+        }
+
 
         System.out.println(" ");
         System.out.println("If you just updated the plugin to a new version don't forget to look");

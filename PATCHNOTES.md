@@ -57,3 +57,9 @@ Big update
 
 [+] Added fairly xp distribution system ( configurable in config file, don't forget to look at CONFIGLINES file )
 [^] upgraded starting message
+
+## V2.2.0
+
+[~] modified updater message
+[+] Added multiple arena per boss difficulties ! /!\ You will have to save a new time your battles arenas, see step 2 of README file. /!\
+
