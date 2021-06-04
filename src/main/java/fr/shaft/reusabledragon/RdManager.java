@@ -9,11 +9,14 @@ import fr.shaft.reusabledragon.listeners.*;
 import fr.shaft.reusabledragon.task.ChestSpawn;
 import org.bukkit.*;
 import org.bukkit.boss.*;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

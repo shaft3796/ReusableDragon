@@ -1,5 +1,7 @@
 package fr.shaft.reusabledragon.listeners;
 
+import fr.shaft.reusabledragon.RdManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +14,13 @@ public class OnEntityDeath implements Listener {
 
         if(event.getEntity() instanceof EnderDragon){
 
-            event.setDroppedExp(0);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(RdManager.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    event.getEntity().remove();
+                }
+            }, 60L);
+
 
         }
 

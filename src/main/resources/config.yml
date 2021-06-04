@@ -1,92 +1,10 @@
-#Reusable Dragon Config file !
+# See here the configuration file guide : https://docs.google.com/document/d/1h_R8G3NbU7CkKxMhgfCRJpF1NhTq47T2op1eVjo5SVw/edit?usp=sharing
 
-#Name of the world of your server with the end, it's world_the_end if you didn't change it or if you didn't create an other world with multiverse.
-world: "world_the_end"
+#######################################################################################################################
 
-#start of the main island protection zone
-endProtectionRoots: "-200 0 -200"
-#end of the main island protection zone
-endProtectionEnd: "200 200 200"
+#                                                    Language
 
-#start of the battle arena zone huge dimensions may cause lag and crash /!\
-battleArenaRoots: "-50 50 -50"
-#end of the battle arena zone huge dimensions may cause lag and crash /!\
-battleArenaEnd: "50 110 50"
-
-#You can customise here the damages and the life of the dragon for each difficulties "<life>; <damage>"
-difficulties:
-  easy: "200; 15"
-  medium: "400; 20"
-  hard: "800; 30"
-
-
-#Materials and their quantity required to spawn the dragon with /dragon command you can find the list of the spigot materials here
-#Make sure to only use materials of your version !
-
-#Spigot materials 1.16.5 https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-#Spigot materials 1.15 https://helpch.at/docs/1.15/index.html?org/bukkit/Material.html
-#Spigot materials 1.14 https://helpch.at/docs/1.14/org/bukkit/Material.html
-#Spigot materials 1.13 https://helpch.at/docs/1.13/index.html?org/bukkit/Material.html
-#Spigot materials 1.12.2 https://helpch.at/docs/1.12.2/org/bukkit/Material.html
-#Spigot materials 1.11 https://helpch.at/docs/1.11.2/index.html?org/bukkit/Material.html
-#Spigot materials 1.10 https://helpch.at/docs/1.10/org/bukkit/Material.html
-#Spigot materials 1.9 https://helpch.at/docs/1.9/org/bukkit/Material.html
-#Spigot materials 1.8.8 https://helpch.at/docs/1.8.8/org/bukkit/Material.html
-#Spigot materials 1.7.2 https://helpch.at/docs/1.7.2/org/bukkit/Material.html
-
-#And use this format :
-# required:
-#  - "Material quantity"
-#  - "Material quantity"
-#  - "Material quantity"
-
-required:
-  easy:
-    - "END_CRYSTAL 4"
-  medium:
-    - "END_CRYSTAL 4"
-  hard:
-    - "END_CRYSTAL 4"
-
-
-
-#Rewards which will be earned by players, "<Material ( above )>; <quantity given>; <probability in %>; <true: each player has the given probability of obtaining the reward, false: if the reward appears it will be randomly given to a player>"
-
-#use this format :
-# rewards:
-#  - "Material; quantity; probability; type;"
-#  - "Material; quantity; probability; type;"
-#  - "Material; quantity; probability; type;"
-#Bad Material will made error and no reward but no crash, see the list above
-#Don't put more quantity that the item stack max quantity
-#Probability is in percent don't forget to add .0 at the end -> 10 is not correct, 10.0 is correct. You can use very small values like 0.01
-#type is true or false :
-#true: each player has the given probability of obtaining the reward so several players can win the rewards
-#false: if the reward appears it will be randomly given to a player so only one player can win the rewards
-
-rewards:
-  easy:
-    - "DRAGON_EGG; 1; 5.0; false"
-  medium:
-    - "DRAGON_EGG; 1; 10.0; false"
-  hard:
-    - "DRAGON_EGG; 1; 15.0; false"
-
-#The xp all players who killed the dragon will earn use this link to help you to config your own values
-#https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/82/XP_Per_Level_14w02a.svg/revision/latest?cb=20190719090818
-exp:
-  easy: 500
-  medium: 750
-  hard: 1000
-
-#Spawn method, the method to spawn the dragon
-# "1" : /dragon command will check in your inventory if you have required materials to spawn the dragon
-# "2;X;Y;Z" : /dragon command will be disable and to spawn dragon player will have to put the required item in the chest of the given location, You don't have to place the chest, the plugin will place it
-spawnmethod: "1"
-
-
-#select your languages ! you can create your own translations
-
+#######################################################################################################################
 language: "en"
 
 fr:
@@ -130,4 +48,50 @@ tr:
   howToUse: "[Re Dragon] Hey, /dragon komutunu kullanarak ejderhanın doğmasını sağlayabilirsin !!!"
   youKilledDragon: "[Re Dragon] Ejderhayı öldürdün !! ödül dağıtımı . ."
   youGot: "Kazandığın : "
+
+#######################################################################################################################
+
+#                                                    Plugin config
+
+#######################################################################################################################
+
+world: "world_the_end"
+
+endProtectionRoots: "-200 0 -200"
+
+endProtectionEnd: "200 200 200"
+
+battleArenaRoots: "-50 50 -50"
+
+battleArenaEnd: "50 110 50"
+
+difficulties:
+  easy: "200; 15"
+  medium: "400; 20"
+  hard: "800; 30"
+
+required:
+  easy:
+    - "END_CRYSTAL 4"
+  medium:
+    - "END_CRYSTAL 8"
+  hard:
+    - "END_CRYSTAL 12"
+
+rewards:
+  easy:
+    - "DRAGON_EGG; 1; 5.0; false"
+  medium:
+    - "DRAGON_EGG; 1; 10.0; false"
+  hard:
+    - "DRAGON_EGG; 1; 15.0; false"
+
+exp:
+  easy: 500
+  medium: 750
+  hard: 1000
+
+spawnmethod: "1"
+
+
 
