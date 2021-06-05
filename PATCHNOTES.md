@@ -66,3 +66,9 @@ Big update
 ## V2.3.0
 
 [+] Added a new way to spawn the dragon with items placed in a chest !
+
+## V2.3.1
+
+[+] Added a player stats logger which will be used for a next update
+[^] Upgraded config file for a clearer presentation without instructions which will now be available by following this link, you do not need to modify your configuration file if you update the plugin but you will not have the new presentation
+https://docs.google.com/document/d/1h_R8G3NbU7CkKxMhgfCRJpF1NhTq47T2op1eVjo5SVw/edit?usp=sharing

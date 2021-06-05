@@ -21,7 +21,11 @@ Free &amp; open source Spigot plugin
 
 The plugin when started for the first time will create an configuration file, change your end world name if you have a custom name for it ( default it's world_the_end )
 
-#### Step 2 - save your battle arena :
+#### Step 2 - customise your config file :
+
+Customise your config file with this link https://docs.google.com/document/d/1h_R8G3NbU7CkKxMhgfCRJpF1NhTq47T2op1eVjo5SVw/edit?usp=sharing
+
+#### Step 3 - save your battle arena :
 
 When started for the first time, the plugin will create 6 files :
 
@@ -34,15 +38,11 @@ RdEntitiesHard.rd
 
 It's your battles areas data. By default, all difficulties will have the same area. Let's now save our areas.
 
-Build your area how you want from and make sure to have ender crystal placed ! Use /rdsave easy to save your easy battle area.
+Build your area how you want and make sure to have ender crystal placed ! Use /rdsave easy to save your easy battle area.
 
 Build new area or keep the same and save the areas for other difficulties with /rdsave medium and /rdsave hard
 
 Now all your areas are saved for each difficulty
-
-#### Step 3 - customise your config file :
-
-Customise your config file with the instructions above every lines
 
 #### Step 4 - add permissions to your players :
 
@@ -51,8 +51,8 @@ Customise your config file with the instructions above every lines
 
 ### Commands
 
-/rdsave
-Save the battle arena
+/rdsave difficulty
+Save the battle arena, difficulty is easy medium or hard
 
 /dragon difficulty
 Make the dragon spawn, difficulty is easy medium or hard
@@ -60,4 +60,4 @@ Make the dragon spawn, difficulty is easy medium or hard
 -----------------------------------------
 ### thank you for downloading Reusable Dragon
 
-If you want to contact me find help or informations : discord :arrow_right: https://discord.gg/9wBVmneY8x
+If you want to contact me find help or information : discord :arrow_right: https://discord.gg/9wBVmneY8x
