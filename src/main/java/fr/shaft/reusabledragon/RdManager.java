@@ -10,6 +10,7 @@ import fr.shaft.reusabledragon.task.ChestSpawn;
 import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -201,9 +202,19 @@ public class RdManager {
     //Load config
     private static void loadConfig(){
 
+        FileConfiguration config = plugin.getConfig();
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        config.options().copyDefaults(true);
+        configFile.delete();
+        plugin.saveDefaultConfig();
+        plugin.reloadConfig();
+
+
+
+
+
         //Dragon Attributes
         {
-            FileConfiguration config = plugin.getConfig();
 
             //EASY
             String[] words = config.getString("difficulties.easy").split("; ");
@@ -260,7 +271,6 @@ public class RdManager {
 
         //required materials
         {
-            FileConfiguration config = plugin.getConfig();
 
             for (Difficulty difficulty : Difficulty.values()) {
 
@@ -288,7 +298,6 @@ public class RdManager {
 
         //rewards
         {
-            FileConfiguration config = plugin.getConfig();
 
             for (Difficulty difficulty : Difficulty.values()) {
 
